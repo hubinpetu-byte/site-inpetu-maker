@@ -10,16 +10,21 @@ import Image from 'next/image';
 
 export default function Home() {
   // Referência para controlar o scroll do carrossel de projetos
-  const scrollRef = useRef(null);
+const scrollRef = useRef<HTMLDivElement>(null);
 
   // Função para mover o carrossel (pode ser ligada a botões no futuro)
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
+  const scroll = (direction: string) => {
+  if (scrollRef.current) {
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    const scrollToTarget = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
+    
+    // O scrollTo agora vai funcionar porque o TS sabe que é uma DIV
+    scrollRef.current.scrollTo({ 
+      left: scrollToTarget, 
+      behavior: 'smooth' 
+    });
+  }
+};
 
   return (
     <div className="w-full bg-[#FAFAFA]">
@@ -163,7 +168,7 @@ export default function Home() {
 
     {/* 2. Lógica dos dias (sem letras manuais aqui dentro) */}
     {(() => {
-      const hoje = new Date(); // Hoje é 21/03/2026
+      const hoje = new Date(); 
       const ano = hoje.getFullYear();
       const mes = hoje.getMonth();
       
