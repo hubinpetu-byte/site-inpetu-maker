@@ -6,4 +6,4 @@ export default function LaboratoriosPage() {
       <h1>Laboratórios InPETU</h1>
     </main>
   );
-}
+}// reset final.
