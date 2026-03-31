@@ -2,8 +2,9 @@ import React from 'react';
 
 export default function LaboratoriosPage() {
   return (
-    <div>
-      <h1>Laboratórios</h1>
-    </div>
+    <main className="p-20 text-center">
+      <h1 className="text-4xl font-black">Laboratórios InPETU</h1>
+      <p>Página em manutenção para ajustes técnicos.</p>
+    </main>
   );
 }
