@@ -74,11 +74,11 @@ export default function LaboratoriosApoioPage() {
           <div className="relative min-w-[260px]">
             {/* Fonte aumentada no select: text-xl */}
             <select 
-              className="w-full bg-white text-[#0077cc] font-bold py-4 px-6 rounded-xl appearance-none cursor-pointer outline-none shadow-sm text-xl"
+              className="w-full bg-white text-[#0077cc] font-regular py-4 px-6 rounded-xl appearance-none cursor-pointer outline-none shadow-sm text-sm"
               value={filtroAtivo}
               onChange={(e) => setFiltroAtivo(e.target.value)}
             >
-              <option value="Todos">Filtrar por categoria</option>
+              <option value="Todos">Todos</option>
               <option value="Conceber">Conceber</option>
               <option value="Construir">Construir</option>
               <option value="Integrar">Integrar</option>

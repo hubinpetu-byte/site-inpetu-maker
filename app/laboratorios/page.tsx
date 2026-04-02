@@ -16,7 +16,7 @@ export default function LaboratoriosSelecaoPage() {
       titulo: "Laboratórios Parceiros",
       descricao: "Laboratórios parceiros do InPETU Maker, que podem apoiar em demandas específicas, com conhecimento técnico ou equipamentos.",
       imagem: "/laboratorios/parceiros-capa.jpg", // Certifique-se de ter esta imagem
-      href: "/sobre-nos/parceiros/laboratorios"
+      href: "/avaliar/laboratorios-parceiros"
     }
   ];
 
