@@ -38,8 +38,7 @@ const Footer = () => {
             <div className="flex flex-col gap-3">
               <h4 className="font-bold text-[#191F37] uppercase">Contato</h4>
               <nav className="flex flex-col gap-1 text-[#191F37]/80">
-                <a href="#">Formulário de contato</a>
-                <a href="#">Agendamento de visita</a>
+                <a href="/contato">Formulário de contato</a>
                 <a href="https://www.google.com/maps?ll=-27.430725,-48.442898&z=16&t=m&hl=pt-BR&gl=BR&mapclient=embed&cid=14830641887610885303">Localização</a>
               </nav>
             </div>

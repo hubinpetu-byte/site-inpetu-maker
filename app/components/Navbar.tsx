@@ -13,6 +13,7 @@ const Navbar = () => {
         { label: "Portfólio", href: "/sobre/portfolio" },
         { label: "Nosso espaço", href: "/sobre/nosso-espaco" },
         { label: "Jornada Maker", href: "/sobre/jornada-maker" },
+        { label: "Agenda", href: "/sobre/agenda" },
         // { label: "Políticas de uso", href: "#" },
         // { label: "Rede FabLab", href: "#" }
       ]

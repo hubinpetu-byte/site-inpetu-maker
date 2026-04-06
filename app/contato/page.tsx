@@ -11,24 +11,18 @@ export default function ContatoPage() {
     setStatus("sending");
 
     const formData = new FormData(event.currentTarget);
-    
-    // SUBSTITUA PELA SUA URL GERADA NO GOOGLE APPS SCRIPT
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJvPh5LbYNWx-6OpGNElPCxkdr7zmPljcDzaveoWuIG-oHqjCFC0gZ3Hdsr0yVng5P/exec";
 
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         body: formData,
-        mode: "no-cors" // Necessário para evitar erro de CORS com o Google
+        mode: "no-cors"
       });
 
-      // Como o Google no-cors não retorna resposta, assumimos sucesso após o envio
       setStatus("success");
       (event.target as HTMLFormElement).reset();
-      
-      // Volta ao estado inicial após 5 segundos
       setTimeout(() => setStatus("idle"), 5000);
-
     } catch (err) {
       console.error(err);
       setStatus("error");
@@ -36,7 +30,7 @@ export default function ContatoPage() {
   }
 
   return (
-    <main className="w-full bg-[#f4f4f4] pt-[60px] pb-20 px-6 min-h-screen font-sans">
+    <main className="w-full bg-[#f4f4f4] pt-[100px] pb-20 px-6 min-h-screen font-sans">
       <div className="max-w-[1355px] mx-auto">
         
         {/* CABEÇALHO */}
@@ -52,7 +46,7 @@ export default function ContatoPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           
-          {/* LADO ESQUERDO: INFORMAÇÕES */}
+          {/* LADO ESQUERDO: INFORMAÇÕES E MAPA */}
           <div className="space-y-8">
             <div className="bg-white p-10 rounded-[35px] shadow-sm border-l-[10px] border-[#0077cc]">
               <h2 className="text-[#191F37] text-[26px] font-black mb-8">Informações</h2>
@@ -74,7 +68,7 @@ export default function ContatoPage() {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Telefone</span>
-                    <span className="font-bold text-lg">+55 (48) 3721-XXXX</span>
+                    <span className="font-bold text-lg">+55 (48) 3239-2030</span>
                   </div>
                 </div>
 
@@ -84,24 +78,29 @@ export default function ContatoPage() {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Localização</span>
-                    <span className="font-bold text-base leading-tight">InPETU hub - UFSC, Florianópolis - SC</span>
+                    <span className="font-bold text-base leading-tight">Av. Luiz Boiteux Piazza, 1302 - Canasvieiras, Florianópolis - SC</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* MAPA PLACEHOLDER */}
-            <div className="w-full h-[300px] bg-[#D9D9D9] rounded-[35px] border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
-               {/* Substitua o iframe abaixo pelo embed real do Google Maps quando tiver */}
-               <div className="text-gray-500 font-bold flex flex-col items-center gap-2">
-                  <MapPin size={40} className="opacity-20" />
-                  <span>Mapa InPETU Hub</span>
-               </div>
+            {/* MAPA REAL CORRIGIDO - SEM DUPLICIDADE DE ATRIBUTOS */}
+            <div className="w-full h-[400px] bg-white rounded-[35px] border-4 border-white shadow-md overflow-hidden relative group">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3540.354670275811!2d-48.44856012411684!3d-27.458213815809756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9527415f95412795%3A0x6315801380631580!2sInPETU%20Hub!5e0!3m2!1spt-BR!2sbr!4v1712415123456!5m2!1spt-BR!2sbr" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen // <--- AQUI: Certifique-se que o S está maiúsculo
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              className="grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500"
+            ></iframe>
             </div>
           </div>
 
           {/* LADO DIREITO: FORMULÁRIO */}
-          <div className="bg-[#191F37] p-10 md:p-14 rounded-[45px] shadow-2xl relative">
+          <div className="bg-[#191F37] p-10 md:p-14 rounded-[45px] shadow-2xl">
             <h3 className="text-white text-[32px] font-black mb-2">Envie uma mensagem</h3>
             <p className="text-white/50 mb-10 text-sm">Campos com * são obrigatórios</p>
             
@@ -109,28 +108,17 @@ export default function ContatoPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="text-white/70 text-xs mb-2 block font-bold">Nome completo *</label>
-                  <input 
-                    type="text" name="name" required
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all placeholder:text-white/20"
-                    placeholder="Seu nome"
-                  />
+                  <input type="text" name="name" required className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all" placeholder="Seu nome" />
                 </div>
                 <div>
                   <label className="text-white/70 text-xs mb-2 block font-bold">E-mail *</label>
-                  <input 
-                    type="email" name="email" required
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all placeholder:text-white/20"
-                    placeholder="exemplo@email.com"
-                  />
+                  <input type="email" name="email" required className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all" placeholder="exemplo@email.com" />
                 </div>
               </div>
 
               <div>
                 <label className="text-white/70 text-xs mb-2 block font-bold">Assunto</label>
-                <select 
-                  name="subject"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all appearance-none cursor-pointer"
-                >
+                <select name="subject" className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all appearance-none cursor-pointer">
                   <option className="text-black" value="Geral">Dúvida geral</option>
                   <option className="text-black" value="Orcamento">Orçamento</option>
                   <option className="text-black" value="Visita">Agendar Visita</option>
@@ -140,42 +128,18 @@ export default function ContatoPage() {
 
               <div>
                 <label className="text-white/70 text-xs mb-2 block font-bold">Mensagem *</label>
-                <textarea 
-                  name="message" required rows={5}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all resize-none placeholder:text-white/20"
-                  placeholder="Como podemos ajudar você hoje?"
-                />
+                <textarea name="message" required rows={5} className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white outline-none focus:border-[#0077cc] transition-all resize-none" placeholder="Como podemos ajudar?" />
               </div>
 
               <button 
-                type="submit"
+                type="submit" 
                 disabled={status === "sending" || status === "success"}
-                className={`w-full font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl
-                  ${status === "success" 
-                    ? "bg-green-500 text-white cursor-default" 
-                    : "bg-[#0077cc] text-white hover:bg-[#005fa3] active:scale-[0.98] disabled:opacity-50"
-                  }`}
+                className={`w-full font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl ${status === "success" ? "bg-green-500 text-white" : "bg-[#0077cc] text-white hover:bg-[#005fa3] disabled:opacity-50"}`}
               >
-                {status === "idle" && (
-                  <>
-                    <span>Enviar agora</span>
-                    <Send size={20} />
-                  </>
-                )}
-                {status === "sending" && <span>Processando...</span>}
-                {status === "success" && (
-                  <>
-                    <span>Mensagem enviada!</span>
-                    <CheckCircle2 size={22} />
-                  </>
-                )}
+                {status === "idle" && <><Send size={20} /> Enviar agora</>}
+                {status === "sending" && "Processando..."}
+                {status === "success" && <><CheckCircle2 size={22} /> Enviado!</>}
               </button>
-
-              {status === "error" && (
-                <div className="bg-red-500/20 border border-red-500/50 p-4 rounded-xl">
-                  <p className="text-red-400 text-center font-bold text-sm">Ocorreu um erro ao enviar. Tente novamente.</p>
-                </div>
-              )}
             </form>
           </div>
         </div>
