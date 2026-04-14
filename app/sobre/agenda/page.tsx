@@ -33,7 +33,7 @@ export default function AgendaPageGrande() {
         
         <div className="mb-12">
           <div className="w-20 h-[3px] bg-[#E9D354] mb-4"></div>
-          <h1 className="text-[#0077cc] text-[48px] font-black">Cronograma Completo</h1>
+          <h1 className="text-[#0077cc] text-[48px] font-black">Agenda de Atividades</h1>
         </div>
 
         {/* --- CALENDÁRIO GIGANTE --- */}

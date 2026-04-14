@@ -3,45 +3,55 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { projetosPortfolio } from './data'; // Importando os dados centralizados
+import { projetosPortfolio } from './data';
 
 export default function PortfolioPage() {
   const [filtro, setFiltro] = useState("Todos");
 
-  // Filtra os projetos com base na categoria selecionada
   const projetosFiltrados = filtro === "Todos" 
     ? projetosPortfolio 
     : projetosPortfolio.filter(p => p.categoria === filtro);
 
   return (
-    <div className="w-full bg-white pt-[120px] pb-20">
+    // Alterado pt-[120px] para pt-0 para o conteúdo encostar no topo
+    <div className="w-full bg-white pt-0 pb-20">
       
-{/* HEADER DO PORTFÓLIO COM IMAGEM DE FUNDO */}
-<section className="max-w-[1355px] mx-auto px-6 mb-12">
-  {/* Adicionamos 'relative' para a <Image fill /> funcionar */}
-  <div className="bg-[#D9D9D9] rounded-xl p-16 relative overflow-hidden min-h-[350px] flex flex-col justify-end shadow-inner">
-    <Image 
-      src="/banners/banner_portfolio.png" // O caminho correto dentro da pasta banner
-      alt="Fundo Banner Portfólio InPETU Maker"
-      fill // Preenche todo o container pai
-      className="object-cover z-0" // object-cover garante que a imagem não distorça
-      unoptimized // Adicione se for SVG ou PNG simples, para o Next não processar
-    />
-   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-1" /> 
-    <div className="relative z-10 flex flex-col gap-2">
-      <h1 className="text-white text-[48px] md:text-[64px] font-black leading-tight drop-shadow-lg">
-        Portfólio
-      </h1>
-      <p className="text-white text-[18px] md:text-[24px] font-medium max-w-2xl drop-shadow-md">
-        Ideias que viraram realidade no InPETU maker
-      </p>
-    </div>
+      {/* HEADER FULL WIDTH - BANNER NO TOPO ABSOLUTO */}
+      <section className="w-full relative z-0"> 
+        {/* Removemos o mt- negativo e arredondamentos para cobrir a tela toda */}
+        <div className="relative overflow-hidden min-h-[600px] flex flex-col justify-end bg-black">
+          
+          {/* 1. IMAGEM DE FUNDO */}
+          <Image 
+            src="/banners/banner_portfolio.png" 
+            alt="Banner Portfólio InPETU"
+            fill 
+            priority
+            unoptimized
+            className="object-cover opacity-70"
+            style={{ zIndex: 0 }}
+          />
 
-  </div>
-</section>
+          {/* 2. OVERLAY PARA CONTRASTE ESTILO 'ROBOARM' */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60"
+            style={{ zIndex: 1, pointerEvents: 'none' }} 
+          /> 
 
-      {/* SISTEMA DE FILTROS */}
-      <section className="max-w-[1355px] mx-auto px-6 mb-16">
+          {/* 3. CONTEÚDO DO TEXTO (Alinhado com o container de 1355px) */}
+          <div className="relative z-20 w-full max-w-[1355px] mx-auto px-6 mb-16" style={{ zIndex: 10 }}>
+            <h1 className="text-white text-[56px] md:text-[84px] font-black leading-tight drop-shadow-2xl">
+              Portfólio
+            </h1>
+            <p className="text-white text-[20px] md:text-[28px] font-medium max-w-2xl drop-shadow-lg">
+              Ideias que viraram realidade no InPETU Maker
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SISTEMA DE FILTROS (Espaçamento superior adicionado aqui) */}
+      <section className="max-w-[1355px] mx-auto px-6 mb-16 mt-16">
         <div className="flex flex-wrap gap-4">
           {["Todos", "Protótipos", "Workshops", "Programas", "Eventos"].map((cat) => (
             <button
@@ -69,12 +79,12 @@ export default function PortfolioPage() {
           {projetosFiltrados.map((item) => (
             <div key={item.slug} className="group border-2 border-gray-100 rounded-2xl overflow-hidden flex flex-col bg-white hover:border-[#0077cc] transition-all hover:shadow-2xl">
               
-              {/* Imagem com Badge de Categoria */}
               <div className="relative h-[280px] bg-gray-100 overflow-hidden">
                 <Image 
                   src={item.banner} 
                   alt={item.titulo} 
                   fill 
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500" 
                   unoptimized
                 />
@@ -83,7 +93,6 @@ export default function PortfolioPage() {
                 </span>
               </div>
               
-              {/* Conteúdo Informativo */}
               <div className="p-8 flex flex-col flex-grow">
                 <h3 className="text-[#191F37] text-[24px] font-black mb-1 group-hover:text-[#0077cc] transition-colors">
                   {item.titulo}
@@ -92,10 +101,9 @@ export default function PortfolioPage() {
                   {item.autor}
                 </p>
                 <p className="text-[#555555] text-[15px] leading-relaxed mb-8 flex-grow line-clamp-4">
-                  {item.resumo} {/* Usando um campo de resumo para o card */}
+                  {item.resumo}
                 </p>
                 
-                {/* Link Dinâmico para a página do projeto */}
                 <Link href={`/sobre/portfolio/${item.slug}`}>
                   <button className="bg-[#E9D354] text-[#191F37] font-extrabold py-3 px-8 rounded-lg w-full hover:bg-[#d4c04d] transition-all active:scale-95 shadow-md">
                     Saiba mais
@@ -106,7 +114,6 @@ export default function PortfolioPage() {
           ))}
         </div>
         
-        {/* PAGINAÇÃO / CARREGAR MAIS */}
         <div className="flex justify-center mt-24">
           <button className="bg-white text-[#0077cc] border-2 border-[#0077cc] font-black py-4 px-16 rounded-xl hover:bg-[#0077cc] hover:text-white transition-all shadow-lg active:scale-95">
             Carregar mais

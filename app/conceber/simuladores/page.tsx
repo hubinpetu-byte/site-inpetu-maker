@@ -6,7 +6,7 @@ import Image from 'next/image';
 const simuladores = [
   { title: "Modelamento geométrico", img: "/conceber/simuladores/modelamento.png" },
   { title: "Análise de tensões", img: "/conceber/simuladores/tensoes.png" },
-  { title: "Dinâmica dos fluidos computacional", img: "/conceber/simuladores/fluidos.png" },
+  { title: "Mecânica dos fluidos computacional", img: "/conceber/simuladores/fluidos.png" },
   { title: "Projeto óptico", img: "/conceber/simuladores/opticos.png" },
   { title: "Transferência de calor", img: "/conceber/simuladores/calor.png" },
 ];

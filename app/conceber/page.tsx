@@ -27,7 +27,7 @@ export default function ConceberPage() {
                   Conceber
                 </h1>
                 <p className="text-[#0077cc] text-[24px] font-medium max-w-2xl mt-2">
-                   Fase inicial para transformar ideias em protótipos consistentes.
+                   Toda criação começa com uma ideia. Aqui você transforma conceitos em projeto
                 </p>
             </div>
           </div>
@@ -36,25 +36,24 @@ export default function ConceberPage() {
 
      {/* BLOCO 2 – COMO FUNCIONA (RESPONSIVO) */}
       <section className="w-full px-6 py-20 md:py-25 bg-[#FFFFFF]">
-        <div className="max-w-[1355px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
+        <div className="max-w-[1355px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-00 items-center">
           
           {/* Lado Esquerdo: Quadro Cinza + Imagem Sobreposta */}
           <div className="relative h-[480px] w-full hidden md:flex items-center">
             {/* Quadro Cinza de Fundo (Substituindo a imagem traseira) */}
-            <div className="absolute top-0 left-4 w-[340px] h-[400px] bg-[#D9D9D9] rounded-[20px] shadow-lg border-4 border-white flex items-center justify-center">
-              {/* Ícone de placeholder opcional ou apenas o fundo sólido */}
-              <div className="w-18 h-12 border-2 border-gray-400 rounded-full opacity-20"></div>
+            <div className="absolute top-0 left-2 w-[440px] h-[520px] bg-[#D9D9D9] rounded-[20px] shadow-lg border-4 border-white flex items-center justify-center">
+             
             </div>
             
             {/* Imagem de Frente (Mantida) */}
-            <div className="absolute bottom-0 left-[140px] w-[340px] h-[400px] bg-white rounded-[20px] shadow-2xl border-4 border-white z-10 overflow-hidden">
+            <div className="absolute bottom-1 left-[40px] w-[440px] h-[520px] bg-white rounded-[20px] shadow-2xl border-4 border-white z-10 overflow-hidden">
                 <Image 
                   src="/conceber/img2.png" 
                   alt="Conceito em destaque" 
                   fill 
                   className="object-cover" 
                   unoptimized 
-                />
+                />0
             </div>
           </div>
 
@@ -63,15 +62,16 @@ export default function ConceberPage() {
             <h2 className="text-[#0377CC] text-[36px] md:text-[48px] font-extrabold leading-tight mb-4 text-center md:text-left">
               Como funciona
             </h2>
-            <p className="text-[#00A0E4] text-[20px] md:text-[24px] font-bold mb-6 text-center md:text-left">
+            <p className="text-[#00A0E4] text-[16px] md:text-[24px] font-bold mb-6 text-center md:text-left">
               Sua ideia ganha forma e viabilidade técnica
             </p>
             <div className="text-[#333333] text-[18px] md:text-[20px] leading-relaxed text-justify space-y-4">
               <p>
-                A etapa <b>Conceber</b> é onde as ideias ganham forma antes da construção física do protótipo. 
+               A etapa Conceber é dedicada ao desenvolvimento inicial das soluções, antes da construção física do protótipo. 
               </p>
               <p>
-                Nessa fase, o InPETU Maker oferece ferramentas de <b>modelagem geométrica, simulação e análise técnica</b> que permitem avaliar conceitos, testar soluções e tomar decisões com mais segurança.
+                 
+Nesse momento, o InPETU Maker disponibiliza ferramentas de modelagem, simulação e análise técnica que permitem avaliar conceitos, testar possibilidades e tomar decisões com maior segurança.
               </p>
             </div>
           </div>
@@ -106,7 +106,7 @@ export default function ConceberPage() {
               <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-[#181F37]/20 to-[#181F37]/90" />
               <div className="relative z-20">
                 <h3 className="text-white text-[28px] font-bold leading-tight">Mentoria técnica</h3>
-                <p className="text-white/90 text-[16px] mt-2">Apoio especializado para validar a viabilidade do seu projeto.</p>
+                <p className="text-white/90 text-[16px] mt-2">Orientação especializada para definição de materiais, processos e estratégias de desenvolvimento.</p>
               </div>
             </div>
 
@@ -129,7 +129,7 @@ export default function ConceberPage() {
   
   <div className="relative z-20">
     <h3 className="text-white text-[28px] font-bold leading-tight">Softwares de modelagem</h3>
-    <p className="text-white/90 text-[16px] mt-2">Acesso a ferramentas avançadas de CAD e simulação física.</p>
+    <p className="text-white/90 text-[16px] mt-2">Treinamentos teóricos em ferramentas de CAD e simulação.</p>
     
     {/* Indicador visual de ação para o usuário */}
     <span className="text-[#E9D354] text-[12px] font-bold uppercase mt-4 block opacity-0 group-hover:opacity-100 transition-opacity">
@@ -151,7 +151,7 @@ export default function ConceberPage() {
               <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-[#181F37]/20 to-[#181F37]/90" />
               <div className="relative z-20">
                 <h3 className="text-white text-[28px] font-bold leading-tight">Coworking e troca</h3>
-                <p className="text-white/90 text-[16px] mt-2">Espaço colaborativo para networking com outros makers.</p>
+                <p className="text-white/90 text-[16px] mt-2">Espaço colaborativo com mesas de trabalho para estudo, criação e interação entre projetos.</p>
               </div>
             </div>
 
