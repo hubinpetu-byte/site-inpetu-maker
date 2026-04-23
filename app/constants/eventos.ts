@@ -22,14 +22,14 @@ export const LISTA_DE_EVENTOS: Evento[] = [
     dia: 30, mes: 3, ano: 2026, 
     nome: "Workshop Desafio de um Maker Space", 
     tipo: "workshop", 
-    href: "https://www.sympla.com.br/evento/dia-mundial-da-criatividade-sapiens-parque-connect/3386181",
+    href: "/sobre/portfolio/workshop-desafios",
     descricao: "Programação completa no Passeio Sapiens, com Roda de conversa maker e workshops"
   },
   { 
     dia: 21, mes: 4, ano: 2026, 
     nome: "World Creativity Day", 
     tipo: "evento", 
-    href: "/contato",
+    href: "https://www.sympla.com.br/evento/dia-mundial-da-criatividade-sapiens-parque-connect/3386181",
     descricao: "Programação completa no Passeio Sapiens, com Roda de conversa maker e workshops"
   },
 ];

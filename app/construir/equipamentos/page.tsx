@@ -3,7 +3,17 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { detalhesEquipamentos } from './data';
 import ModalDetalhes from '@/app/components/ModalDetalhes';
+import Link from 'next/link';
 
+
+const criarSlug = (nome: string) => {
+  return nome
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, '-');
+    };
+    
 // 1. Definição da lista de equipamentos (certifique-se de que os nomes batam com o data.ts)
 const listaEquipamentos = [
   { nome: "Impressora 3D FDM", categorias: ["Fabricação Digital"], img: "/equipamentos/impressora.png" },
@@ -96,9 +106,13 @@ export default function EquipamentosPage() {
               <div className="relative z-20 p-6">
                 <h3 className="text-white text-[22px] font-bold mb-4 min-h-[54px]">{eq.nome}</h3>
                 <div className="flex gap-2">
-                   <button className="flex-1 bg-white text-black py-2 rounded font-bold text-xs uppercase hover:bg-gray-100 transition-colors">
-                     Reservar
-                   </button>
+                   {/* Botão RESERVAR (Agora é um link com o estilo do seu botão) */}
+                  <Link 
+                    href={`/construir/reservas/${criarSlug(eq.nome)}`}
+                    className="flex-1 bg-white text-black py-2 rounded font-bold text-xs uppercase hover:bg-gray-100 transition-colors text-center flex items-center justify-center"
+                  >
+                    Reservar
+                  </Link>
                    <button 
                      onClick={() => abrirDetalhes(eq)}
                      className="flex-1 bg-white text-black py-2 rounded font-bold text-xs uppercase hover:bg-gray-100 transition-colors"

@@ -33,21 +33,51 @@
 
   {
     slug: "workshop-desafios",
+    tipo: "workshop",
     titulo: "Workshop de Desafios em um MakerSpace",
     subtitulo: "E como o design de produto trabalha na solução",
     autor: "Março, 2026",
     categoria: "Workshops", // Tag para o segundo filtro
     resumo: "Workshop realizado com alunos de Design de Produto da UFSC para apresentar desafios reais de um makerspace e explorar oportunidades de solução por meio do design.",
     banner: "/portfolio/workshop-desafios/banner_v2.jpg",
-    desafio: "Apresentar os principais desafios de um makerspace, envolvendo operação, experiência do usuário, segurança e organização do espaço.",
-    solucao: "Compartilhamento de vivências do InPETU Maker e discussão aberta para geração de ideias e direcionamento de soluções em design de produto.",
-    projetoDetalhe: "Foram abordados temas como mobiliário modular, otimização de espaço, reaproveitamento de materiais e armazenamento de protótipos, conectando essas demandas com o desenvolvimento de novos produtos.",
-    comoContribuimos: "Levamos a experiência prática do InPETU Maker, apresentando sua estrutura, modelo de operação e principais desafios para orientar o desenvolvimento dos projetos dos alunos.",
+    projetoDetalhe: "Apresentar os principais desafios de um makerspace, envolvendo operação, experiência do usuário, segurança e organização do espaço. Compartilhamento de vivências do InPETU Maker e discussão aberta para geração de ideias e direcionamento de soluções em design de produto. Foram abordados temas como mobiliário modular, otimização de espaço, reaproveitamento de materiais e armazenamento de protótipos, conectando essas demandas com o desenvolvimento de novos produtos. Levamos a experiência prática do InPETU Maker, apresentando sua estrutura, modelo de operação e principais desafios para orientar o desenvolvimento dos projetos dos alunos.",
     imagensGaleria: ["/portfolio/workshop-desafios/1.jpg", "/portfolio/workshop-desafios/21.jpg"],
     parceiros: [
       { nome: "UFSC", logo: "/logos/UFSC.png" }
     ],
     // ADICIONE ESTA LINHA ABAIXO:
     downloads: [] 
-  }
+  },
+
+{
+  slug: "workshop-chaveiros-3d",
+  tipo: "workshop",
+  titulo: "Workshop de Impressão 3D com modelos paramétricos",
+  subtitulo: "Experiência criativa com modelagem paramétrica",
+  autor: "Abril, 2026",
+  categoria: "Workshops",
+  resumo: "Durante o evento Dia Mundial da Criatividade – Sapiens Connect, o InPETU Maker promoveu um workshop aberto de criação de chaveiros personalizados, proporcionando ao público uma experiência prática com modelagem paramétrica e impressão 3D.",
+  banner: "/portfolio/WCD/banner.png",
+  projetoDetalhe: `No dia 21 de abril de 2026, o InPETU Maker participou do evento Dia Mundial da Criatividade – Sapiens Connect, promovendo um workshop aberto de criação de chaveiros personalizados com impressão 3D no Passeio Sapiens. A atividade integrou a programação do evento e atraiu participantes interessados em vivenciar, de forma prática, o universo da fabricação digital.
+
+Durante o workshop, o público teve a oportunidade de criar seu próprio chaveiro, explorando modelos paramétricos que permitiam personalização de forma simples e acessível. A proposta foi apresentar, na prática, como funciona o processo de construção de um modelo digital, destacando as possibilidades de variação e adaptação a partir de parâmetros definidos.
+
+Além da etapa de criação, os participantes puderam acompanhar todo o processo de impressão 3D em tempo real, compreendendo as etapas envolvidas desde o modelo digital até a materialização do objeto. Ao final, cada pessoa levou seu chaveiro para casa como lembrança da experiência, com a possibilidade de personalizá-lo ainda mais por meio de pintura livre.
+
+A iniciativa teve como objetivo aproximar o público das tecnologias presentes em um makerspace, demonstrando de forma acessível e interativa o potencial da fabricação digital. A atividade também reforça o papel do InPETU Maker como um espaço de experimentação, aprendizado e difusão de conhecimento, promovendo o contato direto com ferramentas e processos que estimulam a criatividade e a inovação.`,
+  imagensGaleria: ["/portfolio/WCD/11.png", "/portfolio/WCD/22.png", "/portfolio/WCD/33.png", "/portfolio/WCD/4.png"],
+  parceiros: [
+    { nome: "Sapiens Parque", logo: "/logos/logo_sapiens.png" },
+    { nome: "InPETU hub", logo: "/logos/logo_hub.png" },
+    { nome: "Impact Hub", logo: "/logos/impact.png" },
+    { nome: "Anima King", logo: "/logos/animaking.png" },
+    { nome: "Passeio Sapiens", logo: "/logos/passeio.png" },
+    { nome: "Mercadoteca", logo: "/logos/mercadoteca.png" },
+    { nome: "FEESC", logo: "/logos/logo_feesc.png" },
+    { nome: "UFSC", logo: "/logos/UFSC.png" },
+    { nome: "Fapesc", logo: "/logos/logo_fapesc.png" },
+    { nome: "FINEP", logo: "/logos/logo_finep.png" }
+  ],
+  downloads: []
+},
 ];
