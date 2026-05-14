@@ -20,9 +20,7 @@ const Footer = () => {
               <h4 className="font-bold text-[#191F37] uppercase">Info</h4>
               <nav className="flex flex-col gap-1 text-[#191F37]/80">
                 <a href="/sobre" className="hover:underline">Sobre</a>
-                <a href="#">Princípios</a>
                 <a href="#">Parceiros</a>
-                <a href="#">Notícias e eventos</a>
               </nav>
             </div>
 

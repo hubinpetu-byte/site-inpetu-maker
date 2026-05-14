@@ -1,0 +1,22 @@
+[
+  {
+    "id": "mgqn5o7",
+    "maquina_unidade": 4,
+    "usuario_nome": "Julia Hanna Okada",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-15",
+    "horario_inicio": "16:00",
+    "horario_fim": "18:00",
+    "created_at": "2026-05-14T13:16:45.699Z"
+  },
+  {
+    "id": "g7aggte",
+    "maquina_unidade": 1,
+    "usuario_nome": "Julia",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "09:00",
+    "horario_fim": "10:00",
+    "created_at": "2026-05-14T13:55:04.160Z"
+  }
+]
