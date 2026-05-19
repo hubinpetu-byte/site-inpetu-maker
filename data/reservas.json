@@ -18,5 +18,95 @@
     "horario_inicio": "09:00",
     "horario_fim": "10:00",
     "created_at": "2026-05-14T13:55:04.160Z"
+  },
+  {
+    "id": "7bcfjsg",
+    "maquina_unidade": 1,
+    "usuario_nome": "julia",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "17:00",
+    "horario_fim": "18:00",
+    "created_at": "2026-05-14T14:12:32.386Z"
+  },
+  {
+    "id": "jtnixd7",
+    "maquina_unidade": 3,
+    "usuario_nome": "Julia Hanna",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-18",
+    "horario_inicio": "15:00",
+    "horario_fim": "17:00",
+    "created_at": "2026-05-14T14:18:57.780Z"
+  },
+  {
+    "id": "3evzcs3",
+    "maquina_unidade": 3,
+    "usuario_nome": "julia",
+    "usuario_email": "julia.okada@gmail.c",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "09:00",
+    "horario_fim": "10:00",
+    "created_at": "2026-05-14T14:21:25.648Z"
+  },
+  {
+    "id": "6m4t16z",
+    "maquina_unidade": 3,
+    "usuario_nome": "Julia",
+    "usuario_email": "test.ok@gmail.com",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "14:00",
+    "horario_fim": "17:00",
+    "created_at": "2026-05-14T14:22:46.283Z"
+  },
+  {
+    "id": "uip19ct",
+    "maquina_unidade": 2,
+    "usuario_nome": "julia",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "12:00",
+    "horario_fim": "14:00",
+    "created_at": "2026-05-14T14:39:44.889Z"
+  },
+  {
+    "id": "9u45rgb",
+    "maquina_unidade": 2,
+    "usuario_nome": "julia",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "15:00",
+    "horario_fim": "16:00",
+    "created_at": "2026-05-14T14:42:40.139Z"
+  },
+  {
+    "id": "n4bvvur",
+    "maquina_unidade": 4,
+    "usuario_nome": "jula",
+    "usuario_email": "jula.okada@gaaco.cc",
+    "data_reserva": "2026-05-14",
+    "horario_inicio": "15:00",
+    "horario_fim": "16:00",
+    "created_at": "2026-05-14T14:45:17.759Z"
+  },
+  {
+    "id": "r6p07a5",
+    "maquina_unidade": 1,
+    "usuario_nome": "Julia Okada",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-19",
+    "horario_inicio": "16:00",
+    "horario_fim": "17:00",
+    "created_at": "2026-05-19T17:19:10.154Z"
+  },
+  {
+    "id": "1jkouhd",
+    "maquina_unidade": 1,
+    "usuario_nome": "Jennifer Costa",
+    "usuario_email": "JennijCosta@gmail.com",
+    "data_reserva": "2026-05-19",
+    "horario_inicio": "13:00",
+    "horario_fim": "16:00",
+    "created_at": "2026-05-19T17:19:39.360Z"
   }
 ]

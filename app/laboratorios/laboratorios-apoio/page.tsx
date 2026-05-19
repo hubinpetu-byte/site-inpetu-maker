@@ -94,7 +94,7 @@ export default function LaboratoriosApoioPage() {
       {/* 2. TEXTO DESCRITIVO */}
       <section className="max-w-[1355px] mx-auto mb-16">
         <p className="text-[#333333] text-[18px] leading-relaxed text-justify max-w-[1200px]">
-          Os laboratórios de apoio do InPETU Maker estão localizados no InPETU Hub, formando um ambiente integrado que reúne diferentes competências técnicas em um mesmo espaço. Essa proximidade permite acesso a infraestrutura complementar e suporte especializado ao longo de todas as etapas de desenvolvimento de protótipos.
+          Os laboratórios de apoio do InPETU Maker estão localizados no InPETU hub, formando um ambiente integrado que reúne diferentes competências técnicas em um mesmo espaço. Essa proximidade permite acesso a infraestrutura complementar e suporte especializado ao longo de todas as etapas de desenvolvimento de protótipos.
         </p>
       </section>
 

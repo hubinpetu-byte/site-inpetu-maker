@@ -4,7 +4,7 @@ import path from 'path';
 
 const filePath = path.join(process.cwd(), 'data', 'reservas.json');
 
-// COLE AQUI A URL QUE VOCÊ COPIOU DO GOOGLE APPS SCRIPT
+// URL gerada pelo seu Google Apps Script
 const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxk_jrRD3EvTd0SCf7h37LjcQQ0hTXq-g5D6Tx3iGFXwNabv--ZiguA6CHJNr9hTatihw/exec";
 
 function lerReservas() {
@@ -53,25 +53,37 @@ export async function POST(request: Request) {
       created_at: new Date().toISOString()
     };
 
-    // 1. Salva local no JSON para a interface React continuar rápida
+    // 1. SALVA LOCALMENTE PRIMEIRO (Garante o funcionamento básico do app)
     reservasExistentes.push(novaReserva);
     fs.writeFileSync(filePath, JSON.stringify(reservasExistentes, null, 2));
 
-    // 2. Envia em segundo plano para a Planilha Google + Dispara Notificação por E-mail
-    if (GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL !== "https://script.google.com/macros/s/AKfycbxk_jrRD3EvTd0SCf7h37LjcQQ0hTXq-g5D6Tx3iGFXwNabv--ZiguA6CHJNr9hTatihw/exec") {
+    // 2. ENVIA PARA O GOOGLE SHEETS COM BLOCO DE ISOLAMENTO TOTAL
+    if (GOOGLE_SHEET_WEBAPP_URL) {
       try {
+        // timeout de segurança para a requisição não travar o Next.js se a rede estiver lenta
+        const controller = new AbortController();
+        const idTimeout = setTimeout(() => controller.abort(), 5000);
+
         await fetch(GOOGLE_SHEET_WEBAPP_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(novaReserva)
+          body: JSON.stringify(novaReserva),
+          signal: controller.signal
         });
+        
+        clearTimeout(idTimeout);
       } catch (sheetError) {
-        console.error("Erro ao sincronizar com o Google Sheets:", sheetError);
+        // Se a rede da faculdade travar a conexão com o Google, o erro aparece AQUI no terminal
+        console.error("⚠️ Erro de rede/permissão ao sincronizar com Google Sheets:", sheetError);
       }
     }
 
+    // Retorna sucesso 201 porque a reserva local foi gravada com sucesso!
     return NextResponse.json(novaReserva, { status: 201 });
+
   } catch (err) {
-    return NextResponse.json({ error: 'Erro ao processar reserva.' }, { status: 500 });
+    // Esse console.log vai te cuspir o erro real no terminal do VS Code caso algo quebre na leitura do arquivo
+    console.error("🚨 Erro Crítico no Backend:", err);
+    return NextResponse.json({ error: 'Erro interno ao processar a reserva.' }, { status: 500 });
   }
 }
