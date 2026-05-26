@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth"; // Importa o login do Firebase
+import { auth } from "@/lib/firebase"; // Importa a conexão configurada do Firebase
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,30 +19,27 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3001/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, senha }),
-      });
+      // 🚀 Faz o login autenticando direto no Firebase do Google
+      const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+      const user = userCredential.user;
 
-      const data = await response.json();
+      // O Firebase e nosso AuthContext já cuidam de monitorar o token e o usuário,
+      // mas mantemos uma cópia leve no localStorage caso outras partes do seu layout precisem:
+      localStorage.setItem("usuario_uid", user.uid);
 
-      if (!response.ok) {
-        setErro(data.message || "Email ou senha inválidos");
-        return;
-      }
-
-      // ✅ salva token e usuário
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("usuario", JSON.stringify(data.usuario));
-
-      // 🚀 redireciona para o perfil
+      // 🚀 Redireciona direto para o perfil do aluno no MakerSpace
       router.push("/perfil");
 
-    } catch (error) {
-      setErro("Erro ao conectar com o servidor");
+    } catch (error: any) {
+      // Tratamento amigável de erros comuns do Firebase
+      if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password" || error.code === "auth/invalid-credential") {
+        setErro("E-mail ou senha inválidos.");
+      } else if (error.code === "auth/invalid-email") {
+        setErro("Formato de e-mail inválido.");
+      } else {
+        setErro("Erro ao conectar com o servidor do Firebase.");
+      }
+      console.error("Erro Firebase Auth:", error);
     } finally {
       setLoading(false);
     }
@@ -77,7 +76,9 @@ export default function LoginPage() {
           />
 
           {erro && (
-            <p className="text-sm text-red-200 text-center">{erro}</p>
+            <p className="text-sm text-red-200 text-center font-medium bg-red-600/30 py-1.5 rounded-md border border-red-500/20">
+              {erro}
+            </p>
           )}
 
           <button

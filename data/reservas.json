@@ -108,5 +108,35 @@
     "horario_inicio": "13:00",
     "horario_fim": "16:00",
     "created_at": "2026-05-19T17:19:39.360Z"
+  },
+  {
+    "id": "fg1bh9x",
+    "maquina_unidade": 1,
+    "usuario_nome": "Julia Hanna Okada",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-28",
+    "horario_inicio": "11:00",
+    "horario_fim": "13:00",
+    "created_at": "2026-05-26T18:29:42.864Z"
+  },
+  {
+    "id": "iuezf3v",
+    "maquina_unidade": 1,
+    "usuario_nome": "Julia Hanna Okada",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-26",
+    "horario_inicio": "14:00",
+    "horario_fim": "16:00",
+    "created_at": "2026-05-26T18:33:46.545Z"
+  },
+  {
+    "id": "opsxi5q",
+    "maquina_unidade": 2,
+    "usuario_nome": "Julia Hanna Okada",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-05-26",
+    "horario_inicio": "15:00",
+    "horario_fim": "16:00",
+    "created_at": "2026-05-26T18:56:41.169Z"
   }
 ]

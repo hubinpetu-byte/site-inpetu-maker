@@ -5,7 +5,7 @@ import path from 'path';
 const filePath = path.join(process.cwd(), 'data', 'reservas.json');
 
 // URL gerada pelo seu Google Apps Script
-const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxk_jrRD3EvTd0SCf7h37LjcQQ0hTXq-g5D6Tx3iGFXwNabv--ZiguA6CHJNr9hTatihw/exec";
+const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxk_jrRD3EvTd0SCf7h37LjcQQ0hTXq-g5D6Tx3iGFXwNabv--ZiguA6CHJNr9hTatihw/execnpm ";
 
 function lerReservas() {
   try {

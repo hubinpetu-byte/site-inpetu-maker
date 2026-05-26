@@ -33,35 +33,33 @@
 
 
   {
-    slug: "Troféu e Medalhas Arena Ação Jr.",
+    slug: "Arena-Acao",
     titulo: "Troféu e Medalhas",
     subtitulo: " para a Maratoratona Arena Ação Jr.",
     autor: "InPETU Maker e InPETU Open Lab, 2026",
     categoria: "Protótipos",
     resumo: "O 'RoboArm Precision' é um projeto de braço robótico desenvolvido por um grupo de estudantes de engenharia para demonstrar precisão mecânica.",
-    banner: "/portfolio/banner-braco.png",
-     desafio: `O projeto foi desenvolver uma premiação exclusiva para a Arena Ação Jr., criando troféus personalizados que representassem visualmente a identidade do programa, uma maratona de inovação promovida pelo InPETU Open Lab em conjunto com a Ação Jr.`,
-     solucao: `A solução desenvolvida pelo InPETU Maker consistiu na criação de três troféus personalizados — destinados ao 1º, 2º e 3º lugar — produzidos por meio de impressão 3D.
+    banner: "/portfolio/banner-trofeu.png",
+     desafio: `O projeto foi desenvolver uma premiação exclusiva para a Arena Ação Jr., criando troféus personalizados que representassem visualmente a identidade da maratona de inovação promovida pelo InPETU Open Lab em conjunto com a Ação Jr.`,
+     solucao: `A solução desenvolvida pelo InPETU Maker consistiu na criação de três troféus de impressão 3D.
 
-O desenvolvimento utilizou elementos visuais presentes na identidade da Arena Ação Jr., incorporando formas, cores e características que reforçassem a conexão entre a premiação e o propósito do programa. A abordagem permitiu criar peças únicas, com identidade visual alinhadas.`,
-  projetoDetalhe: ` O projeto nasceu da necessidade de transformar a premiação da Arena Ação Jr. em um elemento que representasse a criatividade e o protagonismo das equipes participantes. A proposta foi desenvolvida integralmente pelo InPETU Maker, desde a concepção inicial até a fabricação final das peças.
+O desenvolvimento utilizou elementos visuais presentes na identidade da Arena Ação Jr., incorporando formas, cores e característica.`,
+  projetoDetalhe: ` O projeto nasceu da necessidade de transformar a premiação da Arena Ação Jr. em um elemento que representasse a criatividade e o protagonismo das equipes participantes. A proposta foi desenvolvida pelo InPETU Maker, desde a concepção até a fabricação final das peças.
 
-Ao longo do processo, a equipe realizou etapas de modelagem, desenho técnico, testes de materiais, fabricação e acabamento, buscando equilibrar estética, viabilidade de produção e qualidade final. A impressão 3D possibilitou maior liberdade formal para o desenvolvimento dos troféus, enquanto o acabamento em tinta acrílica contribuiu para valorizar os detalhes e reforçar as cores da identidade visual do evento.
+Ao longo do processo, a equipe realizou etapas de modelagem, desenho técnico, testes de materiais, fabricação e acabamento, buscando equilibrar estética, viabilidade de produção e qualidade final. A impressão 3D possibilitou maior liberdade formal para o desenvolvimento dos troféus, enquanto o acabamento com caneta acrilica possibilitou detalhes extras, que contribuiu para valorizar e reforçar as cores da identidade visual do evento.
 
-O projeto também contou com o acompanhamento e participação das equipes do InPETU Hub e do InPETU Open Lab, que contribuíram com sugestões e validações durante o desenvolvimento das peças.
+O projeto também contou com o acompanhamento e participação da equipe do InPETU Open Lab, que contribuíram com sugestões e validações durante o desenvolvimento das peças.
 
 Os troféus foram produzidos para premiar as melhores ideias desenvolvidas no desafio aberto promovido pelo programa do Open Lab em parceria com a Ação Jr., fortalecendo a conexão entre inovação, prototipagem e reconhecimento.`,
     comoContribuimos: "O InPETU Maker atuou em todas as etapas do projeto, oferecendo suporte completo desde o desenvolvimento conceitual até a entrega final dos troféus. A infraestrutura de prototipagem e fabricação digital permitiu transformar a proposta em peças físicas personalizadas, com atenção aos detalhes estéticos e funcionais.",
-     imagensGaleria: ["/portfolio/braco-1.jpg", "/portfolio/braco-2.jpg"],
+     imagensGaleria: ["/portfolio/trofeu/1.jpeg", "/portfolio/trofeu/2.jpeg"],
      parceiros: [
        { nome: "CTC", logo: "/logos/ctc.png" },
-      { nome: "UFSC", logo: "/logos/ufsc.png" }
+      { nome: "UFSC", logo: "/logos/ufsc.png" },
+      { nome: "InPETU Open Lab", logo: "/logos/openlab.png" },
+      { nome: "Ação Jr.", logo: "/logos/acaojr.png" }
      ],
-     downloads: [
-       { nome: "Banner do projeto", tipo: "pdf" },
-      { nome: "STL da carcaça", tipo: "stl" },
-       { nome: "Esquema eletrônico", tipo: "image" }
-     ]
+     downloads: [     ]
    },
 
   {

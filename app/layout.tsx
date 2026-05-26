@@ -1,28 +1,32 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
-import React from "react";
+"use client";
+
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./components/Navbar"; 
+import { AuthProvider } from "../contexts/AuthContext"; // 1. Certifique-se de importar o Provider
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "InPETU Maker",
-  description: "Projeto do InPETU Maker",
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="pt-BR">
-      <body className={`${jakarta.className} bg-[#FAFAFA] text-black min-h-screen flex flex-col`}>
-        <Navbar />
-        <main className="relative z-10 w-full flex-grow">
-          {children}
-        </main>
-        <Footer />
+      <body className={`${inter.className} bg-[#FAFAFA] text-black min-h-screen flex flex-col`}>
+        
+        {/* 2. O AuthProvider PRECISA envelopar a Navbar e o main */}
+        <AuthProvider>
+          
+          <Navbar />
+          
+          <main className="relative z-10 w-full flex-grow">
+            {children}
+          </main>
+          
+        </AuthProvider>
+
       </body>
     </html>
   );

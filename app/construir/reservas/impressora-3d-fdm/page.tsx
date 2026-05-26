@@ -2,15 +2,23 @@
 
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Monitor, AlertCircle, Clock, User, ShieldAlert } from 'lucide-react';
+import { auth, db } from '../../../../lib/firebase'; // 🌟 Caminho corrigido! Subindo 4 níveis
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 export default function PaginaReservasLocal() {
+  const router = useRouter();
   const [unidadeAtiva, setUnidadeAtiva] = useState(1);
   const [dataSelecionada, setDataSelecionada] = useState(new Date().toISOString().split('T')[0]);
   const [reservas, setReservas] = useState([]);
+  const [loading, setLoading] = useState(true);
   
-  // Estados para o formulário
+  // Estados automáticos sincronizados com a conta do Maker
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
+  
+  // Estados para o formulário
   const [horaInicio, setHoraInicio] = useState('09:00');
   const [horaFim, setHoraFim] = useState('10:00');
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
@@ -33,9 +41,34 @@ export default function PaginaReservasLocal() {
     }
   };
 
+  // Monitora o estado de autenticação e puxa os dados reais da conta do Firestore
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const docRef = doc(db, "users", firebaseUser.uid);
+          const snap = await getDoc(docRef);
+
+          if (snap.exists()) {
+            const dadosUsuario = snap.data();
+            setNome(dadosUsuario.nome || '');
+            setEmail(dadosUsuario.email || '');
+          }
+        } catch (error) {
+          console.error("Erro ao buscar dados do perfil autenticado:", error);
+        }
+      } else {
+        // Se não tiver logado no site do maker, chuta de volta pra autenticação
+        router.push("/auth");
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
   useEffect(() => {
     carregarReservas();
-    // Limpa mensagens de erro ao trocar de máquina
     setMensagem({ tipo: '', texto: '' });
   }, [unidadeAtiva, dataSelecionada]);
 
@@ -44,14 +77,13 @@ export default function PaginaReservasLocal() {
     e.preventDefault();
     setMensagem({ tipo: '', texto: '' });
 
-    // Bloqueio extra de segurança no envio do formulário
     if (estaIndisponivel) {
       setMensagem({ tipo: 'erro', texto: 'Esta unidade está temporariamente indisponível para novos agendamentos.' });
       return;
     }
 
     if (!nome || !email) {
-      setMensagem({ tipo: 'erro', texto: 'Preencha o seu nome e e-mail' });
+      setMensagem({ tipo: 'erro', texto: 'Sua conta não possui Nome ou E-mail válidos vinculados.' });
       return;
     }
 
@@ -61,6 +93,7 @@ export default function PaginaReservasLocal() {
     }
 
     try {
+      // 1. Envia para a API local para atualizar a grade de horários da página
       const resposta = await fetch('/api/reservas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -79,12 +112,30 @@ export default function PaginaReservasLocal() {
       if (!resposta.ok) {
         setMensagem({ tipo: 'erro', texto: resultado.error });
       } else {
-        setMensagem({ tipo: 'sucesso', texto: `Unidade ${unidadeAtiva} reservada com sucesso!` });
-        setNome('');
-        setEmail('');
+        
+        // 🌟 2. SALVA NO FIREBASE: Adiciona a reserva na lista do perfil do usuário logado
+        if (auth.currentUser) {
+          const userRef = doc(db, "users", auth.currentUser.uid);
+          
+          // Converte "2026-05-20" em "20/05" para bater com o layout visual do seu perfil
+          const [ano, mes, dia] = dataSelecionada.split('-');
+          const dataFormatada = `${dia}/${mes}`;
+
+          await updateDoc(userRef, {
+            proximasReservas: arrayUnion({
+              maquina: `Impressora 3D - Unidade ${unidadeAtiva}`,
+              data: dataFormatada,
+              horario: `${horaInicio} às ${horaFim}`,
+              status: "Confirmado"
+            })
+          });
+        }
+
+        setMensagem({ tipo: 'sucesso', texto: `Unidade ${unidadeAtiva} reservada com sucesso para ${nome}!` });
         carregarReservas(); // Atualiza a grade instantaneamente
       }
     } catch (err) {
+      console.error(err);
       setMensagem({ tipo: 'erro', texto: 'Erro de conexão com o servidor local.' });
     }
   };
@@ -93,6 +144,15 @@ export default function PaginaReservasLocal() {
   const reservasDoDia = reservas.filter((r: any) => 
     r.maquina_unidade === unidadeAtiva && r.data_reserva === dataSelecionada
   );
+
+  // Exibe tela de carregamento enquanto valida se o usuário está logado
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0077cc]"></div>
+      </div>
+    );
+  }
 
   return (
     <main className="w-full bg-[#FAFAFA] min-h-screen pt-24 pb-20 font-sans">
@@ -134,7 +194,6 @@ export default function PaginaReservasLocal() {
                     </div>
                   </div>
                   
-                  {/* TAG DINÂMICA: Muda de cor se a máquina for a 3 ou 4 */}
                   {quebrou ? (
                     <span className="text-[10px] uppercase font-black px-3 py-1 rounded-full bg-red-100 text-red-700">
                       Manutenção
@@ -158,7 +217,7 @@ export default function PaginaReservasLocal() {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-md">
               
-              {/* Filtro por Data */}
+              {/* Grade de Data */}
               <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-6 mb-6 gap-4">
                 <div className="flex items-center gap-2">
                   <CalendarIcon className="text-[#0077cc]" size={22} />
@@ -173,7 +232,6 @@ export default function PaginaReservasLocal() {
                 />
               </div>
 
-              {/* Se a máquina estiver indisponível, mostra um bloqueio visual em vez do formulário e horários */}
               {estaIndisponivel ? (
                 <div className="flex flex-col items-center justify-center text-center py-12 px-6 bg-red-50/30 border border-dashed border-red-200 rounded-2xl">
                   <ShieldAlert className="text-red-600 mb-3" size={48} />
@@ -202,23 +260,28 @@ export default function PaginaReservasLocal() {
 
                   {/* Formulário de Reserva direta */}
                   <form onSubmit={lidarComAgendamento} className="space-y-4">
-                    <h4 className="text-xs font-black text-[#191F37] uppercase tracking-widest border-b border-gray-50 pb-2">Preencha para Reservar:</h4>
+                    <h4 className="text-xs font-black text-[#191F37] uppercase tracking-widest border-b border-gray-50 pb-2">Seus Dados de Acesso (Identificados):</h4>
                     
+                    {/* 🔒 Campos protegidos que exibem os dados da conta logada de forma fixa */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input 
-                        type="text" 
-                        placeholder="Seu Nome Completo"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="w-full border border-gray-200 rounded-xl p-3 text-sm outline-none focus:border-[#0077cc]"
-                      />
-                      <input 
-                        type="email" 
-                        placeholder="E-mail"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full border border-gray-200 rounded-xl p-3 text-sm outline-none focus:border-[#0077cc]"
-                      />
+                      <div className="relative">
+                        <input 
+                          type="text" 
+                          disabled
+                          value={nome}
+                          className="w-full border border-gray-100 bg-gray-50 text-gray-500 rounded-xl p-3 text-sm outline-none font-medium cursor-not-allowed"
+                        />
+                        <span className="absolute right-3 top-3 text-[10px] bg-slate-200/70 text-slate-500 px-2 py-0.5 rounded font-bold uppercase">Conta</span>
+                      </div>
+                      <div className="relative">
+                        <input 
+                          type="email" 
+                          disabled
+                          value={email}
+                          className="w-full border border-gray-100 bg-gray-50 text-gray-500 rounded-xl p-3 text-sm outline-none font-medium cursor-not-allowed"
+                        />
+                        <span className="absolute right-3 top-3 text-[10px] bg-slate-200/70 text-slate-500 px-2 py-0.5 rounded font-bold uppercase">E-mail</span>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -237,7 +300,7 @@ export default function PaginaReservasLocal() {
                     </div>
 
                     <button type="submit" className="w-full bg-[#0077cc] text-white py-3 rounded-xl font-black text-sm uppercase hover:bg-[#005fa3] transition-colors mt-2">
-                      Confirmar Reserva Local
+                      Confirmar Agendamento Maker
                     </button>
 
                     {mensagem.texto && (
