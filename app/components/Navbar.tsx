@@ -3,9 +3,19 @@ import React, { useState } from "react";
 import { Menu, X, User, CalendarDays } from "lucide-react";
 import { useAuth, AuthProvider } from "../../contexts/AuthContext";
 
+// 🌟 DEFINIÇÃO DE INTERFACE: Resolve o erro de propriedade "does not exist on type 'never'"
+interface PerfilUsuario {
+  nome?: string;
+  fotoUrl?: string;
+  email?: string;
+  role?: string;
+}
+
 const NavbarContent = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, perfil } = useAuth();
+  
+  // Forçamos a tipagem do useAuth para garantir que o compilador reconheça as propriedades
+  const { user, perfil } = useAuth() as { user: any; perfil: PerfilUsuario | null };
 
   const menuItems = [
     {
@@ -71,7 +81,7 @@ const NavbarContent = () => {
               <a href={item.href} className="text-black font-semibold hover:opacity-70 h-full flex items-center px-2">
                 {item.label}
               </a>
-              {/* Submenu Desktop (Sobre, Conceber, etc) */}
+              {/* Submenu Desktop */}
               {item.submenu && item.submenu.length > 0 && (
                 <div className="absolute top-[60px] left-[-15px] min-w-[220px] bg-[#EEE39E] rounded-b-[13px] flex-col pt-4 pb-6 px-6 shadow-xl hidden group-hover:flex z-50">
                   <ul className="flex flex-col gap-4 text-[14px] text-black">
@@ -100,13 +110,13 @@ const NavbarContent = () => {
                 )}
               </div>
 
-              {/* MENU SUSPENSO (Aparece no Hover) */}
-              <div className="absolute top-[60px] right-[-10px] w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 hidden group-hover:block overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 z-[60]">
+              {/* MENU SUSPENSO */}
+              <div className="absolute top-[60px] right-[-10px] w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 hidden group-hover:block overflow-hidden z-[60]">
                 <div className="p-2 flex flex-col">
                   <a href="/perfil" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#0077cc] transition-colors rounded-xl">
                     <User size={18} /> Meu perfil
                   </a>
-                  <a href="/agendar" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#0077cc] transition-colors rounded-xl border-t border-slate-50">
+                  <a href="/construir/reservas/impressora-3d-fdm" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#0077cc] transition-colors rounded-xl border-t border-slate-50">
                     <CalendarDays size={18} /> Agendar atendimento
                   </a>
                 </div>
@@ -140,7 +150,6 @@ const NavbarContent = () => {
         <div className="mt-16">
           {user && perfil ? (
             <div className="space-y-4">
-               {/* Card de Perfil Mobile */}
               <div className="flex items-center gap-3 w-full bg-white text-black p-3 rounded-2xl shadow-md">
                 <div className="w-10 h-10 rounded-full bg-[#0077cc] text-white font-black flex items-center justify-center shrink-0 overflow-hidden">
                   {perfil.fotoUrl ? (
@@ -153,12 +162,11 @@ const NavbarContent = () => {
                   <p className="font-bold text-sm truncate text-slate-800">{perfil.nome || "Usuário"}</p>
                 </div>
               </div>
-              {/* Opções extras no Mobile */}
               <div className="flex flex-col gap-2">
                 <a href="/perfil" onClick={closeMenu} className="bg-white/40 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
                   <User size={16} /> Meu perfil
                 </a>
-                <a href="/agendar" onClick={closeMenu} className="bg-white/40 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
+                <a href="/construir/reservas/impressora-3d-fdm" onClick={closeMenu} className="bg-white/40 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
                   <CalendarDays size={16} /> Agendar atendimento
                 </a>
               </div>
