@@ -138,5 +138,15 @@
     "horario_inicio": "15:00",
     "horario_fim": "16:00",
     "created_at": "2026-05-26T18:56:41.169Z"
+  },
+  {
+    "id": "g27xih8",
+    "maquina_unidade": 1,
+    "usuario_nome": "Julia Hanna Okada",
+    "usuario_email": "julia.okada@gmail.com",
+    "data_reserva": "2026-06-10",
+    "horario_inicio": "13:00",
+    "horario_fim": "16:00",
+    "created_at": "2026-06-10T19:08:02.943Z"
   }
 ]

@@ -1,11 +1,19 @@
-"use client";
-
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar"; 
-import { AuthProvider } from "../contexts/AuthContext"; // 1. Certifique-se de importar o Provider
+import Footer from "./components/Footer"; // 🌟 Importando o seu Footer de volta!
+import { AuthProvider } from "../contexts/AuthContext";
 
-const inter = Inter({ subsets: ["latin"] });
+// 🌟 Configurando a fonte oficial Plus Jakarta Sans do InPETU Maker
+const plusJakartaSans = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"]
+});
+
+export const metadata = {
+  title: "InPETU Maker",
+  description: "Hub de Prototipagem e Inovação",
+};
 
 export default function RootLayout({
   children,
@@ -14,9 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} bg-[#FAFAFA] text-black min-h-screen flex flex-col`}>
+      <body className={`${plusJakartaSans.className} bg-[#FAFAFA] text-black min-h-screen flex flex-col antialiased`}>
         
-        {/* 2. O AuthProvider PRECISA envelopar a Navbar e o main */}
+        {/* O AuthProvider envelopa tudo de forma segura */}
         <AuthProvider>
           
           <Navbar />
@@ -24,6 +32,9 @@ export default function RootLayout({
           <main className="relative z-10 w-full flex-grow">
             {children}
           </main>
+          
+          {/* 🌟 O seu Footer reaparece aqui, perfeitamente alinhado no rodapé */}
+          <Footer />
           
         </AuthProvider>
 
