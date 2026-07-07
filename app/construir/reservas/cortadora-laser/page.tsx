@@ -142,10 +142,13 @@ export default function PaginaReservasCortadora() {
     }
   };
 
-  // Filtra as reservas feitas especificamente para a Cortadora (ID 99) no dia selecionado
-  const reservasDoDia = reservas.filter((r: any) => 
-    r.maquina_unidade === 99 && r.data_reserva === dataSelecionada
-  );
+{/* Filtra as reservas de forma segura prevenindo respostas inválidas da API */}
+  const reservasDoDia = Array.isArray(reservas) 
+    ? reservas.filter((r: any) => 
+        r.maquina_unidade === unidadeAtiva && r.data_reserva === dataSelecionada
+      )
+    : [];
+    
 
   if (loading) {
     return (

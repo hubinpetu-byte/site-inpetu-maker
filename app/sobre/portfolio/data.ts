@@ -1,35 +1,74 @@
     export const projetosPortfolio = [
-//   {
-//     slug: "braco-robotico",
-//     titulo: "Braço Robótico",
-//     subtitulo: "Engenharia em Ação",
-//     autor: "Lucas, Andrea e Beatriz, 2025",
-//     categoria: "Protótipos",
-//     resumo: "O 'RoboArm Precision' é um projeto de braço robótico desenvolvido por um grupo de estudantes de engenharia para demonstrar precisão mecânica.",
-//     banner: "/portfolio/banner-braco.png",
-//     desafio: `O principal desafio do projeto era conceber e construir um protótipo de braço robótico integrando sensores e microcontroladores. Isso era fundamental para que ele fosse capaz de manipular objetos com precisão e exatidão em ambientes controlados.`,
-//     solucao: `A solução para o desafio do 'RoboArm Precision' envolveu uma abordagem multifacetada e integrada. 
+      {
+  slug: "workshop-prototipagem-design-produto",
+  tipo: "workshop",
+  titulo: "Workshop de Prototipagem e Fabricação Digital para Design de Produto",
+  subtitulo: "Da ideia ao protótipo: experimentação aplicada ao desenvolvimento de produtos",
+  autor: "Junho, 2026",
+  categoria: "Workshops",
+  resumo: "O InPETU Maker promoveu duas atividades com estudantes da segunda fase de Design de Produto da UFSC, proporcionando uma experiência prática em prototipagem e fabricação digital, desde a concepção do projeto até a produção e acabamento dos protótipos.",
+  banner: "/portfolio/workshop-prototipagem/banner.jpg",
+  projetoDetalhe: `Nos dias 12 e 19 de junho de 2026, o InPETU Maker realizou duas atividades voltadas aos estudantes da segunda fase do curso de Design de Produto da Universidade Federal de Santa Catarina (UFSC), proporcionando uma experiência prática com prototipagem e fabricação digital aplicada ao desenvolvimento de produtos.
 
-// A equipe optou por um design modular para o braço robótico, permitindo ajustes e otimizações ao longo do processo de montagem.`,
-//     projetoDetalhe: `O projeto RoboArm Precision nasceu como um desafio acadêmico no contexto da disciplina de prototipagem em engenharia, reunindo os talentos de Lucas, Sofia, Pedro, Isabela e Rafael. O objetivo central era: conceber e construir um protótipo funcional de braço robótico que se destacasse pela sua capacidade de manipular objetos com extrema precisão e exatidão, superando as complexidades inerentes à robótica e eletrônica.
+Na primeira atividade, realizada na UFSC, os participantes conheceram os fundamentos da impressão 3D e exploraram o uso da inteligência artificial como ferramenta de apoio ao processo de desenvolvimento de projetos. Durante a oficina, foram apresentados conceitos de fabricação digital, etapas de criação de protótipos e fatores que influenciam a qualidade e a viabilidade da impressão de uma peça.
 
-// O grupo enfrentou um desafio multifacetado, que exigiu a aplicação prática de conhecimentos teóricos e uma forte dose de colaboração. A primeira barreira foi o Design e Estrutura: como projetar um braço robótico que fosse leve o suficiente para ser ágil, mas robusto para manter a estabilidade e a precisão?
+Ao longo da atividade, os estudantes desenvolveram protótipos de jogos voltados à inovação e ao empreendedorismo, contando com o acompanhamento da equipe do InPETU Maker para discutir soluções de modelagem, escolha de materiais e estratégias de prototipagem. A proposta permitiu transformar ideias em modelos físicos, aproximando os participantes dos desafios e possibilidades envolvidos no desenvolvimento de produtos.
 
-// Em seguida, a Integração de Sistemas representou um ponto crítico, demandando a conexão e programação eficaz de diversos componentes eletrônicos, como motores e placas de controle, para garantir movimentos fluidos e controlados. Por fim, a Colaboração em Equipe foi essencial, exigindo a gestão eficiente da divisão de tarefas e uma comunicação constante para resolver os obstáculos que surgiam e assegurar a conclusão do protótipo dentro do prazo estipulado.
+Na segunda etapa, realizada no InPETU hub, no Sapiens Parque, os estudantes conheceram a estrutura do laboratório e acompanharam as etapas finais de preparação dos protótipos. Nesse momento, puderam observar seus projetos sendo materializados por meio da impressão 3D, identificando oportunidades de melhoria que normalmente só se tornam evidentes durante a prototipagem física.
 
-// A solução para esses desafios emergiu de uma abordagem estratégica e inovadora. A equipe optou por um Design Modular e Materiais Leves, utilizando uma estrutura que combinava a leveza com a rigidez. A escolha de materiais compósitos e a prototipagem de peças via impressão 3D para os componentes mais complexos facilitaram não apenas a montagem, mas também a possibilidade de ajustes e otimizações contínuas ao longo do processo.`,
-//     comoContribuimos: "O InPETU Maker foi fundamental ao fornecer um ambiente completo de prototipagem e acesso a cortadoras a laser.",
-//     imagensGaleria: ["/portfolio/braco-1.jpg", "/portfolio/braco-2.jpg"],
-//     parceiros: [
-//       { nome: "CTC", logo: "/logos/ctc.png" },
-//       { nome: "UFSC", logo: "/logos/ufsc.png" }
-//     ],
-//     downloads: [
-//       { nome: "Banner do projeto", tipo: "pdf" },
-//       { nome: "STL da carcaça", tipo: "stl" },
-//       { nome: "Esquema eletrônico", tipo: "image" }
-//     ]
-//   },
+A programação também incluiu atividades de pós-processamento das peças, como remoção de suportes, lixamento, pintura e novas impressões para aperfeiçoamento dos modelos desenvolvidos. A experiência proporcionou uma visão completa do processo de fabricação digital, desde a concepção até a finalização dos protótipos, reforçando o papel do InPETU Maker como um espaço de experimentação, aprendizado e incentivo ao desenvolvimento de soluções inovadoras por meio da tecnologia.`,
+  imagensGaleria: [
+    "/portfolio/workshop-prototipagem/1.png",
+    "/portfolio/workshop-prototipagem/2.png",
+    "/portfolio/workshop-prototipagem/3.jpg",
+    "/portfolio/workshop-prototipagem/4.png",
+    "/portfolio/workshop-prototipagem/5.jpg",
+    "/portfolio/workshop-prototipagem/6.png",
+    "/portfolio/workshop-prototipagem/7.jpg",
+    "/portfolio/workshop-prototipagem/8.jpg"
+  ],
+  parceiros: [
+    { nome: "UFSC", logo: "/logos/UFSC.png" },
+    { nome: "InPETU hub", logo: "/logos/logo_hub.png" },
+    { nome: "Fapesc", logo: "/logos/logo_fapesc.png" },
+    { nome: "FINEP", logo: "/logos/logo_finep.png" },
+    { nome: "Design  de Produto - UFSC", logo: "/logos/logo_produto.jpg" }
+  ],
+  downloads: []
+},
+
+{
+  slug: "startup-mentoring-sinova",
+  titulo: "Troféu e Medalhas",
+  subtitulo: "para o programa Startup Mentoring da SINOVA",
+  autor: "InPETU Maker, 2026",
+  categoria: "Protótipos",
+  resumo: "O InPETU Maker desenvolveu um troféu e medalhas personalizados para o programa Startup Mentoring da SINOVA, utilizando impressão 3D para criar uma premiação exclusiva alinhada à identidade visual do programa.",
+  banner: "/portfolio/startup-mentoring/banner.png",
+
+  desafio: `O desafio foi criar uma premiação exclusiva para o programa Startup Mentoring da SINOVA, desenvolvendo um troféu para o primeiro lugar e medalhas para os participantes do pódio que refletissem a identidade visual do programa e valorizassem a experiência do evento.`,
+
+  solucao: `O InPETU Maker desenvolveu um conjunto de peças personalizadas produzidas por impressão 3D, integrando design e fabricação digital para criar uma premiação alinhada à identidade da SINOVA. Enquanto o troféu foi inspirado nos elementos visuais da marca institucional, as medalhas tiveram como referência a identidade do Startup Mentoring, estabelecendo uma conexão entre o programa e seus participantes.`,
+
+  projetoDetalhe: `O projeto teve como objetivo transformar a identidade visual do Startup Mentoring em uma premiação exclusiva que representasse o propósito do programa. O desenvolvimento iniciou com a criação de esboços conceituais, explorando diferentes alternativas de forma, composição e linguagem visual. Após a definição da proposta, foi realizada a modelagem 3D das peças, seguida pela escolha das cores, testes de impressão e definição dos acabamentos.
+
+Cada etapa permitiu aperfeiçoar o projeto antes da fabricação final, garantindo peças visualmente marcantes, funcionais e fiéis à identidade do programa. A impressão 3D possibilitou a criação de geometrias personalizadas e maior liberdade de design, enquanto os acabamentos valorizaram os detalhes e reforçaram os elementos gráficos presentes nas identidades visuais da SINOVA e do Startup Mentoring.
+
+O resultado foi uma premiação personalizada que une inovação, design e fabricação digital, tornando o reconhecimento dos participantes ainda mais significativo.`,
+
+  comoContribuimos: `O InPETU Maker conduziu todas as etapas do desenvolvimento da premiação, desde a concepção das primeiras ideias até a modelagem, fabricação e finalização das peças. Ao integrar design, prototipagem e fabricação digital, transformamos a identidade visual do Startup Mentoring em um conjunto exclusivo de troféu e medalhas, desenvolvido para reconhecer e celebrar os resultados alcançados pelos participantes.`,
+
+  imagensGaleria: [
+    "/portfolio/startup-mentoring/1.jpeg",
+    "/portfolio/startup-mentoring/3.png"
+  ],
+
+  parceiros: [
+   { nome: "SINOVA", logo: "/logos/sinova.png" }
+  ],
+
+  downloads: []
+},
 
 
   {
