@@ -142,12 +142,10 @@ export default function PaginaReservasCortadora() {
     }
   };
 
-{/* Filtra as reservas de forma segura prevenindo respostas inválidas da API */}
-  const reservasDoDia = Array.isArray(reservas) 
-    ? reservas.filter((r: any) => 
-        r.maquina_unidade === unidadeAtiva && r.data_reserva === dataSelecionada
-      )
-    : [];
+// 🌟 CORREÇÃO: Como a cortadora usa o ID 99 fixo, filtramos direto pelo número 99
+const reservasDoDia = reservas.filter((r: any) => 
+  r.maquina_unidade === 99 && r.data_reserva === dataSelecionada
+);
     
 
   if (loading) {
