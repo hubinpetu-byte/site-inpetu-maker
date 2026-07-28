@@ -116,7 +116,7 @@ const NavbarContent = () => {
                   <a href="/perfil" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#0077cc] transition-colors rounded-xl">
                     <User size={18} /> Meu perfil
                   </a>
-                  <a href="/construir/reservas/impressora-3d-fdm" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#0077cc] transition-colors rounded-xl border-t border-slate-50">
+                  <a href="/atendimento" className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#0077cc] transition-colors rounded-xl border-t border-slate-50">
                     <CalendarDays size={18} /> Agendar atendimento
                   </a>
                 </div>
@@ -166,7 +166,7 @@ const NavbarContent = () => {
                 <a href="/perfil" onClick={closeMenu} className="bg-white/40 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
                   <User size={16} /> Meu perfil
                 </a>
-                <a href="/construir/reservas/impressora-3d-fdm" onClick={closeMenu} className="bg-white/40 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
+                <a href="/atendimento" onClick={closeMenu} className="bg-white/40 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-2">
                   <CalendarDays size={16} /> Agendar atendimento
                 </a>
               </div>

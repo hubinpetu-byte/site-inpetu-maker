@@ -57,8 +57,8 @@ export default function AdminPage() {
       setAlunos(lista);
       
       if (alunoSelecionadoHistorico) {
-        const atualizado = lista.find(a => a.uid === alunoSelecionadoHistorico.uid);
-        if (atualizado) setAlunoSelecionadoHistorico(atualizado);
+        const updated = lista.find(a => a.uid === alunoSelecionadoHistorico.uid);
+        if (updated) setAlunoSelecionadoHistorico(updated);
       } else if (lista.length > 0) {
         setAlunoSelecionadoHistorico(lista[0]);
       }
@@ -106,49 +106,41 @@ export default function AdminPage() {
     }
   }
 
-  // 🌟 FUNÇÃO DE VALIDAÇÃO ATUALIZADA COM SUPORTE A AVALIAÇÃO (ESTRELAS)
   async function concluirReservaDoAluno(alunoUid: string, reserva: ReservaData, marcarComoFalta = false) {
     try {
       const alunoRef = doc(db, "users", alunoUid);
 
-      // 1. Remove a reserva da lista futura do aluno
       await updateDoc(alunoRef, {
         proximasReservas: arrayRemove(reserva)
       });
 
-      // 2. Fluxo de Conclusão com Perguntas Operacionais
       if (!marcarComoFalta) {
-        // Pergunta 1: Horas de uso
         const inputHoras = prompt(`[Passo 1/2] Quantas horas o aluno utilizou a máquina?\nReserva original: ${reserva.horario}`, "1");
         const horasEfetivas = parseInt(inputHoras || "1") || 1;
 
-        // Pergunta 2: Avaliação do comportamento/projeto (Nota de 1 a 5)
         const inputNota = prompt(`[Passo 2/2] Avalie o comportamento do aluno e o cuidado com a máquina:\nDigite uma nota de 1 a 5 estrelas:`, "5");
         let notaAvaliacao = parseInt(inputNota || "5") || 5;
         
-        // Garante que o Admin não digite um número bizarro fora de 1 e 5
         if (notaAvaliacao < 1) notaAvaliacao = 1;
         if (notaAvaliacao > 5) notaAvaliacao = 5;
 
-        // Grava no Firestore incluindo a propriedade avaliacao
         await updateDoc(alunoRef, {
           historico: arrayUnion({
             maquina: reserva.maquina,
             data: reserva.data,
             horas: horasEfetivas,
-            avaliacao: notaAvaliacao, // 🌟 Salvando as estrelas no banco!
+            avaliacao: notaAvaliacao,
             status: "Concluído"
           })
         });
         alert(`Atendimento concluído!\n${horasEfetivas}h computadas • Nota ${notaAvaliacao}/5 enviada.`);
       } else {
-        // Fluxo de Falta
         await updateDoc(alunoRef, {
           historico: arrayUnion({
             maquina: reserva.maquina,
             data: reserva.data,
             horas: 0,
-            avaliacao: 0, // Sem nota para faltas
+            avaliacao: 0,
             status: "Não Compareceu (Falta)"
           })
         });
@@ -168,10 +160,6 @@ export default function AdminPage() {
   );
 
   const totalUsuarios = alunos.length;
-  const contagemPorMaquina = listaMaquinas.reduce((acc, maq) => {
-    acc[maq] = alunos.filter(a => a.habilitacoes?.includes(maq)).length;
-    return acc;
-  }, {} as Record<string, number>);
   const totalDeUsosGerais = alunos.reduce((acc, aluno) => acc + (aluno.historico?.length || 0), 0);
 
   if (loading) {
@@ -188,7 +176,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-[#f8fafc] pb-24 pt-[120px] font-sans">
       <div className="max-w-[1280px] mx-auto px-6">
         
-        {/* CABEÇALHO */}
+        {/* CABEÇALHO COM BOTÃO DA AGENDA SEMANAL */}
         <div className="bg-[#191F37] rounded-3xl p-8 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-xl mb-8">
           <div className="flex items-center gap-4">
             <div className="p-4 bg-blue-500/10 text-blue-400 rounded-2xl border border-blue-500/20">
@@ -199,6 +187,15 @@ export default function AdminPage() {
               <p className="opacity-80 font-medium text-xs md:text-sm mt-0.5">Gerenciamento operacional, permissões e histórico analítico</p>
             </div>
           </div>
+
+          {/* 🚀 BOTÃO DA AGENDA SEMANAL */}
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="flex items-center gap-2 bg-[#0077cc] hover:bg-[#0066b3] text-white font-black text-xs uppercase tracking-widest py-3.5 px-6 rounded-xl transition-all shadow-md active:scale-[0.98] shrink-0"
+          >
+            <Calendar size={16} />
+            Ver Agenda Semanal
+          </button>
         </div>
 
         {/* MÉTRICAS */}
@@ -219,9 +216,8 @@ export default function AdminPage() {
             <div>
               <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Habilitados</p>
               <p className="text-2xl font-black text-slate-800">
-      {/* 🌟 Soma o tamanho do array de habilitacoes de TODOS os alunos cadastrados */}
-      {alunos.reduce((acc, aluno) => acc + (aluno.habilitacoes?.length || 0), 0)}
-    </p>
+                {alunos.reduce((acc, aluno) => acc + (aluno.habilitacoes?.length || 0), 0)}
+              </p>
             </div>
           </div>
           <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -412,7 +408,7 @@ export default function AdminPage() {
                     )}
                   </div>
 
-                  {/* 🌟 HISTÓRICO DE UTILIZAÇÃO COM EXIBIÇÃO DAS ESTRELAS DE AVALIAÇÃO */}
+                  {/* HISTÓRICO DE UTILIZAÇÃO COM EXIBIÇÃO DAS ESTRELAS */}
                   <div>
                     <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                       <CheckCircle2 size={14} className="text-green-600" /> Histórico de Utilização Concluído
@@ -428,7 +424,6 @@ export default function AdminPage() {
                               <span className="font-bold text-slate-700 uppercase tracking-tight">{hist.maquina}</span>
                               <span className="text-gray-400">({hist.data})</span>
                               
-                              {/* 🌟 Renderiza as estrelinhas amarelas de nota dadas pelo Admin caso o uso tenha sido concluído */}
                               {!hist.status?.includes("Falta") && hist.avaliacao && (
                                 <div className="flex gap-0.5 ml-2 bg-white px-1.5 py-0.5 rounded border border-gray-100">
                                   {[...Array(5)].map((_, idx) => (
