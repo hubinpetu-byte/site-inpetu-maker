@@ -11,7 +11,14 @@ export type Evento = {
 };
 
 export const LISTA_DE_EVENTOS: Evento[] = [
-   { 
+  { 
+    dia: 19, mes: 6, ano: 2026, 
+    nome: "Workshop - Turma Metodologia de Projeto | Imprimindo em 3D ", 
+    tipo: "evento", 
+    href: "/sobre/portfolio/workshop-prototipagem-design-produto",
+    descricao: "Workday e Visita ao espaço do InPETU Maker para a turma de Medologia de Projeto do Curso de Design de Produto UFSC"
+  }, 
+  { 
     dia: 12, mes: 6, ano: 2026, 
     nome: "Workshop - Modelos de Impressão 3D com uso de IA", 
     tipo: "workshop", 
@@ -32,4 +39,5 @@ export const LISTA_DE_EVENTOS: Evento[] = [
     href: "https://www.sympla.com.br/evento/dia-mundial-da-criatividade-sapiens-parque-connect/3386181",
     descricao: "Programação completa no Passeio Sapiens, com Roda de conversa maker e workshops"
   },
+  
 ];

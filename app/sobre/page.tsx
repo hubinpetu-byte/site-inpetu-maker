@@ -84,7 +84,7 @@ export default function SobreNos() {
             {/* Imagem de Frente (mais para frente e para a direita) */}
             <div className="absolute bottom-10 right-10 w-[300px] h-[350px] bg-[#D9D9D9] rounded-lg shadow-[0_20px_50px_rgba(0,10,0,0.5)] overflow-hidden border-4 border-white z-10">
               <Image 
-                src="/sobre/inovacao_1.jpg" 
+                src="/sobre/sobre_inovacao1.png" 
                 alt="Inovação 2"
                 fill
                 className="object-cover"

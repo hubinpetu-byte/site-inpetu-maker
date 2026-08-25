@@ -118,7 +118,7 @@ Integrado ao Centro de Inovação, Pesquisa, Empreendedorismo e Tecnologia da Un
             <p className="text-[#333333] text-[18px] leading-relaxed mb-8 text-justify">
              O laboratório conta com uma infraestrutura distribuída em dois andares, projetada para atender às diferentes etapas do processo de prototipagem, da concepção à construção, integração e avaliação de projetos.
 </p>
-<p className="text-[#333333] text-[18px] leading-relaxed mb-8 text-justify">O espaço reúne áreas de fabricação digital, usinagem,montagem, eletrônica, metrologia, caracterização de materiais, visão computacional e suporte técnico, além de ambientes dedicados ao
+<p className="text-[#333333] text-[18px] leading-relaxed mb-8 text-justify">O espaço reúne áreas de fabricação digital, usinagem, montagem, eletrônica, metrologia, caracterização de materiais, visão computacional e suporte técnico, além de ambientes dedicados ao
 aprendizado e à colaboração.
 </p>
 <p className="text-[#333333] text-[18px] leading-relaxed mb-8 text-justify">Essa organização permite o uso seguro e eficiente dos equipamentos, promovendo autonomia aos usuários e viabilizando o desenvolvimento de projetos de diferentes níveis de complexidade.
