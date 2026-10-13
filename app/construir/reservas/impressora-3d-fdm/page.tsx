@@ -2,10 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { auth, db } from '@/lib/firebase'; // Ajuste o caminho da sua lib do Firebase se necessário
+import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+
+// 🚀 IMPORTA O MÓDULO DE PRECIFICAÇÃO DINÂMICA
+import { calcularPrecoReserva } from '@/lib/precificacao';
 
 // 1. Dados das máquinas disponíveis do protótipo
 const MAQUINAS_3D = [
@@ -28,23 +31,35 @@ export default function ReservaImpressora3DPage() {
   const [horarioInicio, setHorarioInicio] = useState('');
   const [horarioFim, setHorarioFim] = useState('');
   
-  // Dados do aluno logado
+  // Dados do aluno e perfil logado
   const [nomeAluno, setNomeAluno] = useState('');
   const [emailAluno, setEmailAluno] = useState('');
+  const [tipoUsuario, setTipoUsuario] = useState('Aluno UFSC'); // Categoria do usuário no banco
 
   // Reservas puxadas do Firebase
   const [reservasExistentes, setReservasExistentes] = useState<any[]>([]);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
 
-  // Preço simbólico por hora para o cálculo da prévia (Ex: R$ 5,00/h)
-  const PRECO_POR_HORA = 79.63; 
+  // Preço base calculado por hora (Tarifa Padrão sem desconto)
+  const PRECO_BASE_POR_HORA = 79.63; 
 
-  // 2. Verifica autenticação do aluno
+  // 2. Verifica autenticação e carrega os dados do perfil no Firestore
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setNomeAluno(user.displayName || '');
         setEmailAluno(user.email || '');
+
+        // 🚀 Busca a categoria do usuário no documento 'users'
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const dadosUser = userDoc.data();
+            setTipoUsuario(dadosUser.tipoUsuario || 'Aluno UFSC');
+          }
+        } catch (err) {
+          console.error("Erro ao buscar perfil do usuário:", err);
+        }
       } else {
         router.push('/auth');
       }
@@ -79,21 +94,17 @@ export default function ReservaImpressora3DPage() {
     }
   }, [maquinaSelecionada, dataReserva]);
 
-  // 4. CÁLCULO DE VALOR: Calcula a diferença de horas entre o início e fim
-  const calcularTotal = () => {
-    if (!horarioInicio || !horarioFim) return 0;
-    const hInicio = parseInt(horarioInicio.split(':')[0]);
-    const hFim = parseInt(horarioFim.split(':')[0]);
-    const diff = hFim - hInicio;
-    return diff > 0 ? diff * PRECO_POR_HORA : 0;
-  };
-
+  // Total de horas selecionadas
   const totalHoras = () => {
     if (!horarioInicio || !horarioFim) return 0;
     const hInicio = parseInt(horarioInicio.split(':')[0]);
     const hFim = parseInt(horarioFim.split(':')[0]);
     return Math.max(0, hFim - hInicio);
   };
+
+  // 4. 🚀 CÁLCULO DE VALOR COM A REGRA DO INPETU MAKER
+  const precificacaoCalculada = calcularPrecoReserva(PRECO_BASE_POR_HORA, tipoUsuario);
+  const valorTotalFinal = totalHoras() * precificacaoCalculada.precoFinal;
 
   // 5. ENVIO PARA O FIREBASE: Salva a nova reserva no Firestore
   const handleConfirmarReserva = async (e: React.FormEvent) => {
@@ -115,16 +126,19 @@ export default function ReservaImpressora3DPage() {
         maquina_unidade: maquinaSelecionada.unidade,
         aluno_nome: nomeAluno,
         aluno_email: emailAluno,
+        aluno_categoria: tipoUsuario,
         data_reserva: dataReserva,
         horario_inicio: horarioInicio,
         horario_fim: horarioFim,
-        valor_total: calcularTotal(),
+        horas_reservadas: totalHoras(),
+        valor_hora_aplicado: precificacaoCalculada.precoFinal,
+        valor_total: valorTotalFinal,
         criado_em: new Date().toISOString(),
         status: "Confirmado"
       });
 
       setMensagem({ tipo: 'sucesso', texto: 'Reserva realizada com sucesso!' });
-      await carregarReservasDoFirebase(); // Recarrega a régua azul na hora
+      await carregarReservasDoFirebase();
       setHorarioInicio('');
       setHorarioFim('');
     } catch (err) {
@@ -234,7 +248,7 @@ export default function ReservaImpressora3DPage() {
                       value={horarioInicio}
                       onChange={(e) => setHorarioInicio(e.target.value)}
                       required
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none focus:border-[#0077cc] appearance-none"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none focus:border-[#0077cc] appearance-none cursor-pointer"
                     >
                       <option value="">Início</option>
                       {HORARIOS_DIA.slice(0, -1).map(h => (
@@ -249,7 +263,7 @@ export default function ReservaImpressora3DPage() {
                       value={horarioFim}
                       onChange={(e) => setHorarioFim(e.target.value)}
                       required
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none focus:border-[#0077cc] appearance-none"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none focus:border-[#0077cc] appearance-none cursor-pointer"
                     >
                       <option value="">Fim</option>
                       {HORARIOS_DIA.slice(1).map(h => (
@@ -261,13 +275,24 @@ export default function ReservaImpressora3DPage() {
                 </div>
               </div>
 
-              {/* PRÉVIA DO VALOR */}
+              {/* 🚀 PRÉVIA DO VALOR COM A TAG DO PERFIL */}
               <div className="space-y-2">
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Prévia do Valor da reserva</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Prévia do Valor da reserva</p>
+                  <span className="text-[10px] font-bold text-[#0077cc] bg-blue-50 px-2.5 py-1 rounded-md">
+                    {precificacaoCalculada.tagStatus}
+                  </span>
+                </div>
+
                 <div className="w-full border border-gray-200 rounded-2xl p-4 flex justify-between items-center bg-white">
-                  <span className="text-xs font-bold text-gray-400">x{totalHoras()} Horas =</span>
+                  <span className="text-xs font-bold text-gray-400">
+                    x{totalHoras()} {totalHoras() === 1 ? 'Hora' : 'Horas'} =
+                  </span>
+                  
                   <span className="text-2xl font-black text-[#0077cc]">
-                    R${calcularTotal().toFixed(2).replace('.', ',')}
+                    {valorTotalFinal === 0 
+                      ? "R$ 0,00" 
+                      : `R$ ${valorTotalFinal.toFixed(2).replace('.', ',')}`}
                   </span>
                 </div>
                 <p className="text-[10px] text-gray-400 italic">*O preço total será enviado para o seu email após a finalização do uso</p>
@@ -286,7 +311,7 @@ export default function ReservaImpressora3DPage() {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-[#E9D354] hover:bg-[#d4be43] text-slate-900 font-black text-sm uppercase tracking-wider py-4 rounded-2xl transition-all shadow-md active:scale-[0.98]"
+                  className="w-full bg-[#E9D354] hover:bg-[#d4be43] text-slate-900 font-black text-sm uppercase tracking-wider py-4 rounded-2xl transition-all shadow-md active:scale-[0.98] cursor-pointer"
                 >
                   Confirmar
                 </button>
@@ -310,7 +335,6 @@ export default function ReservaImpressora3DPage() {
                 {/* TIMELINE DE HORÁRIOS DO DIA */}
                 <div className="space-y-4 relative pl-2">
                   {HORARIOS_DIA.map((hora, idx) => {
-                    // Verifica se essa hora bate com alguma reserva do Firebase
                     const reservaNoHorario = reservasExistentes.find(r => {
                       const hIni = parseInt(r.horario_inicio.split(':')[0]);
                       const hFim = parseInt(r.horario_fim.split(':')[0]);
@@ -323,7 +347,6 @@ export default function ReservaImpressora3DPage() {
                         <span className="opacity-80">{hora}</span>
                         <div className="w-20 border-b border-white/20"></div>
 
-                        {/* Rótulo "Reservado" Amarelo que cobre o horário */}
                         {reservaNoHorario && (
                           <div className="absolute right-0 top-0 bottom-0 bg-[#E9D354] text-slate-900 font-bold text-[10px] uppercase px-3 rounded-lg flex items-center justify-center shadow-md">
                             Reservado

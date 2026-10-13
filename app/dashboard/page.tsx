@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Clock, Monitor, ChevronLeft, ChevronRight, CalendarDays, CheckCircle, Trash2, CheckSquare, Square, X, User, Mail, Layers } from 'lucide-react';
+import { Clock, Monitor, ChevronLeft, ChevronRight, CalendarDays, CheckCircle, Trash2, CheckSquare, Square, X, Mail, Layers, Wrench } from 'lucide-react';
 import { auth, db } from '../../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, getDocs, addDoc, deleteDoc, query, where } from 'firebase/firestore';
@@ -16,7 +16,7 @@ export default function DashboardAgendaSemanal() {
   
   const [painelAtivo, setPainelAtivo] = useState<'agenda' | 'disponibilidade'>('agenda');
 
-  // 🚀 ESTADO PARA O MODAL DE DETALHES
+  // 🚀 ESTADO PARA O MODAL DE DETALHES DE QUALQUER EVENTO
   const [eventoSelecionado, setEventoSelecionado] = useState<any>(null);
 
   const [inicioSemana, setInicioSemana] = useState<Date>(() => {
@@ -44,6 +44,7 @@ export default function DashboardAgendaSemanal() {
     try {
       const eventosEspelho: any[] = [];
 
+      // 1. Busca Atendimentos / Mentorias do Orientador
       const qAtendimentos = query(
         collection(db, "atendimentos_maker"), 
         where("maker_id", "==", uidResponsavel)
@@ -64,6 +65,7 @@ export default function DashboardAgendaSemanal() {
         });
       });
 
+      // 2. Busca Janelas de Disponibilidade do Orientador
       const qDispo = query(
         collection(db, "disponibilidade_maker"),
         where("maker_id", "==", uidResponsavel)
@@ -90,13 +92,32 @@ export default function DashboardAgendaSemanal() {
       setHorariosLiberados(listaDispo.sort((a,b) => a.data.localeCompare(b.data) || a.horario.localeCompare(b.horario)));
       setAgendaSemana(eventosEspelho);
 
-      const resMaquinas = await fetch('/api/reservas?t=' + Date.now());
-      if (resMaquinas.ok) {
-        const dadosMaquinas = await resMaquinas.json();
-        if (Array.isArray(dadosMaquinas)) setMaquinasSemana(dadosMaquinas);
-      }
+      // 3. 🚀 BUSCA DIRETA NO FIREBASE: Todas as reservas de máquinas agendadas
+      const snapMaquinas = await getDocs(collection(db, "reservas_maquinas"));
+      const listaMaquinas: any[] = [];
+      snapMaquinas.forEach((docSnap) => {
+        const dataMaq = docSnap.data();
+        listaMaquinas.push({
+          id: docSnap.id,
+          maquina_id: dataMaq.maquina_id,
+          maquina_nome: dataMaq.maquina_nome || "Impressora 3D",
+          maquina_unidade: dataMaq.maquina_unidade || "Unidade",
+          aluno_nome: dataMaq.aluno_nome || "Aluno UFSC",
+          aluno_email: dataMaq.aluno_email || "Não informado",
+          aluno_categoria: dataMaq.aluno_categoria || "Geral",
+          data_reserva: dataMaq.data_reserva,
+          horario_inicio: dataMaq.horario_inicio || "09:00",
+          horario_fim: dataMaq.horario_fim || "10:00",
+          valor_total: dataMaq.valor_total || 0,
+          status: dataMaq.status || "Agendado",
+          tipo: 'reserva_maquina'
+        });
+      });
+
+      setMaquinasSemana(listaMaquinas);
+
     } catch (err) {
-      console.error(err);
+      console.error("Erro ao carregar dados do Dashboard:", err);
     }
   };
 
@@ -162,7 +183,7 @@ export default function DashboardAgendaSemanal() {
     if (!confirm("Retirar esse horário de circulação?")) return;
     try {
       await deleteDoc(doc(db, "disponibilidade_maker", id));
-      setEventoSelecionado(null); // Fecha o modal se tiver aberto
+      setEventoSelecionado(null);
       await carregarDadosSemana(userIdLogado);
     } catch (e) {
       alert("Erro ao remover.");
@@ -177,7 +198,7 @@ export default function DashboardAgendaSemanal() {
     };
   };
 
-  if (loading || !temAcesso) return <div className="p-12 text-center font-bold">Carregando painel...</div>;
+  if (loading || !temAcesso) return <div className="p-12 text-center font-bold">Carregando painel do laboratório...</div>;
 
   return (
     <main className="w-full bg-[#FAFAFA] min-h-screen pt-24 pb-20 font-sans text-[#191F37] relative">
@@ -187,9 +208,9 @@ export default function DashboardAgendaSemanal() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-6 mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-black flex items-center gap-2">
-              <CalendarDays className="text-[#0077cc]" size={28} /> Agenda de {nomeLogado}
+              <CalendarDays className="text-[#0077cc]" size={28} /> Agenda Geral - {nomeLogado}
             </h1>
-            <p className="text-gray-400 text-sm">Gerencie seus horários de mentoria técnica por aqui.</p>
+            <p className="text-gray-400 text-sm">Gerencie mentorias e acompanhe o uso das máquinas do InPETU Maker.</p>
           </div>
           
           <div className="flex items-center gap-3">
@@ -208,7 +229,7 @@ export default function DashboardAgendaSemanal() {
           </div>
         </div>
 
-        {/* COMPONENTE 1: GRADE SEMANAL COM EVENTO DE CLICK */}
+        {/* COMPONENTE 1: GRADE SEMANAL UNIFICADA */}
         {painelAtivo === 'agenda' && (
           <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {diasDaSemana.map((dia, idx) => {
@@ -219,11 +240,13 @@ export default function DashboardAgendaSemanal() {
                     <p className="text-[10px] uppercase font-black text-gray-400">{dia.toLocaleDateString('pt-BR', { weekday: 'short' })}</p>
                     <p className="text-lg font-black">{dia.getDate()}</p>
                   </div>
+                  
                   <div className="p-2 space-y-2">
+                    {/* CARDS DE MENTORIA */}
                     {mentorias.map(m => (
                       <div 
                         key={m.id} 
-                        onClick={() => setEventoSelecionado(m)} // 🚀 DISPARA O MODAL COM DETALHES
+                        onClick={() => setEventoSelecionado(m)} 
                         className={`p-2.5 rounded-xl border text-xs cursor-pointer active:scale-[0.98] transition-all ${
                           m.tipo === 'vazio_liberado' 
                             ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800 border-dashed hover:bg-emerald-50' 
@@ -235,10 +258,32 @@ export default function DashboardAgendaSemanal() {
                         <p className="text-[9px] text-gray-400 truncate">{m.equipamento}</p>
                       </div>
                     ))}
+
+                    {/* 🚀 CARDS DE RESERVA DE MÁQUINA (CLICÁVEIS) */}
                     {maquinas.map(maq => (
-                      <div key={maq.id} className="p-2.5 rounded-xl bg-amber-50/40 border border-amber-100/40 text-xs">
-                        <span className="block text-amber-700 font-black text-[9px]"><Monitor size={8} className="inline mr-1"/>{maq.horario_inicio}</span>
-                        <p className="font-medium text-slate-600 truncate">Bambu Lab U{maq.maquina_unidade}</p>
+                      <div 
+                        key={maq.id} 
+                        onClick={() => setEventoSelecionado({
+                          tipo: 'reserva_maquina',
+                          alunoNome: maq.aluno_nome,
+                          alunoEmail: maq.aluno_email,
+                          categoria: maq.aluno_categoria,
+                          maquina: maq.maquina_nome,
+                          unidade: maq.maquina_unidade,
+                          horario: `${maq.horario_inicio} às ${maq.horario_fim}`,
+                          dataOriginal: maq.data_reserva,
+                          valorTotal: maq.valor_total,
+                          status: maq.status
+                        })}
+                        className="p-2.5 rounded-xl bg-amber-50/60 border border-amber-200/60 text-xs cursor-pointer hover:bg-amber-100/60 transition-all shadow-2xs"
+                      >
+                        <span className="block text-amber-800 font-black text-[9px] uppercase">
+                          <Monitor size={10} className="inline mr-1"/>{maq.horario_inicio} às {maq.horario_fim}
+                        </span>
+                        <h4 className="font-bold text-slate-800 truncate">{maq.aluno_nome}</h4>
+                        <p className="font-semibold text-amber-700/80 truncate text-[10px]">
+                          {maq.maquina_nome} ({maq.maquina_unidade})
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -248,14 +293,14 @@ export default function DashboardAgendaSemanal() {
           </div>
         )}
 
-        {/* COMPONENTE 2: DISPONIBILIDADE */}
+        {/* COMPONENTE 2: PAINEL DE DISPONIBILIDADE */}
         {painelAtivo === 'disponibilidade' && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <form onSubmit={handleLiberarHorariosMultiplos} className="md:col-span-5 bg-white p-6 rounded-2xl border border-gray-100 shadow-xs space-y-5">
               <h3 className="font-black text-sm uppercase tracking-wider flex items-center gap-1.5 text-emerald-600"><CheckCircle size={16}/> Liberar Turno de Trabalho</h3>
               <div>
                 <label className="block text-[10px] uppercase font-black text-gray-400 mb-1">1. Escolha a Data</label>
-                <input type="date" required value={dataDispo} onChange={(e)=>setDataDispo(e.target.value)} className="w-full border rounded-xl p-3 text-sm font-bold bg-slate-50 outline-none" />
+                <input type="date" required value={dataDispo} onChange={(e)=>setDataDispo(e.target.value)} className="w-full border rounded-xl p-3 text-sm font-bold bg-slate-50 outline-none cursor-pointer" />
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-black text-gray-400 mb-2.5">2. Marque os Horários Disponíveis</label>
@@ -271,7 +316,7 @@ export default function DashboardAgendaSemanal() {
                   })}
                 </div>
               </div>
-              <button type="submit" disabled={!dataDispo || horasSelecionadas.length === 0} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all disabled:opacity-40 shadow-md">Injetar Horários no Site</button>
+              <button type="submit" disabled={!dataDispo || horasSelecionadas.length === 0} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all disabled:opacity-40 shadow-md cursor-pointer">Injetar Horários no Site</button>
             </form>
 
             <div className="md:col-span-7 bg-white p-6 rounded-2xl border border-gray-100 shadow-xs">
@@ -287,7 +332,7 @@ export default function DashboardAgendaSemanal() {
                         Dia {h.data.split('-').reverse().slice(0,2).join('/')} às {h.horario} — <b className="uppercase text-[10px] tracking-wide">{h.status}</b>
                       </span>
                       {h.status === 'disponivel' && (
-                        <button onClick={()=>handleRemoverDispo(h.id)} className="text-gray-400 hover:text-red-600 p-1"><Trash2 size={14}/></button>
+                        <button onClick={()=>handleRemoverDispo(h.id)} className="text-gray-400 hover:text-red-600 p-1 cursor-pointer"><Trash2 size={14}/></button>
                       )}
                     </div>
                   ))
@@ -297,7 +342,7 @@ export default function DashboardAgendaSemanal() {
           </div>
         )}
 
-        {/* 🚀 MODAL FLUTUANTE DE DETALHES (SÓ ABRE SE SELECIONADO) */}
+        {/* 🚀 MODAL FLUTUANTE DE DETALHES (MENTORIAS E RESERVAS DE MÁQUINA) */}
         {eventoSelecionado && (
           <div className="fixed inset-0 bg-[#191F37]/60 backdrop-blur-xs flex items-center justify-center z-50 p-6 animate-fade-in">
             <div className="bg-white w-full max-w-[500px] rounded-3xl p-8 shadow-2xl border border-gray-100 relative space-y-6">
@@ -305,7 +350,7 @@ export default function DashboardAgendaSemanal() {
               {/* Botão Fechar */}
               <button 
                 onClick={() => setEventoSelecionado(null)} 
-                className="absolute right-6 top-6 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
+                className="absolute right-6 top-6 p-1.5 text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -313,23 +358,59 @@ export default function DashboardAgendaSemanal() {
               {/* Cabeçalho do Modal */}
               <div>
                 <span className={`text-[10px] uppercase font-black px-3 py-1 rounded-full ${
-                  eventoSelecionado.tipo === 'vazio_liberado' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'
+                  eventoSelecionado.tipo === 'vazio_liberado' 
+                    ? 'bg-emerald-100 text-emerald-800' 
+                    : eventoSelecionado.tipo === 'reserva_maquina' 
+                    ? 'bg-amber-100 text-amber-900' 
+                    : 'bg-blue-100 text-blue-800'
                 }`}>
-                  {eventoSelecionado.tipo === 'vazio_liberado' ? 'Janela Livre' : 'Compromisso Agendado'}
+                  {eventoSelecionado.tipo === 'vazio_liberado' 
+                    ? 'Janela Livre' 
+                    : eventoSelecionado.tipo === 'reserva_maquina'
+                    ? 'Reserva de Máquina'
+                    : 'Mentoria Técnica'}
                 </span>
+
                 <h3 className="text-xl font-black mt-3 text-slate-800">{eventoSelecionado.alunoNome}</h3>
+                
                 <p className="text-xs text-gray-400 font-semibold flex items-center gap-1 mt-1">
-                  <Clock size={12} /> Dia {eventoSelecionado.dataOriginal.split('-').reverse().join('/')} às {eventoSelecionado.horario}
+                  <Clock size={12} /> Dia {eventoSelecionado.dataOriginal ? eventoSelecionado.dataOriginal.split('-').reverse().join('/') : '--/--'} às {eventoSelecionado.horario}
                 </p>
               </div>
 
-              {/* Corpo condicional do Modal */}
-              {eventoSelecionado.tipo === 'vazio_liberado' ? (
+              {/* Conteúdo dinâmico conforme o tipo de evento */}
+              {eventoSelecionado.tipo === 'reserva_maquina' ? (
+                <div className="space-y-4">
+                  <div className="space-y-2 text-xs font-semibold text-slate-700 bg-slate-50 p-4 rounded-2xl border border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400">Equipamento:</span>
+                      <span className="font-bold text-slate-800">{eventoSelecionado.maquina} ({eventoSelecionado.unidade})</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400">E-mail:</span>
+                      <span className="font-bold text-slate-800">{eventoSelecionado.alunoEmail}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400">Categoria:</span>
+                      <span className="font-bold text-[#0077cc]">{eventoSelecionado.categoria}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-200/60">
+                      <span className="text-gray-400">Valor Calculado:</span>
+                      <span className="font-black text-emerald-600 text-sm">
+                        {eventoSelecionado.valorTotal === 0 ? "R$ 0,00" : `R$ ${eventoSelecionado.valorTotal.toFixed(2).replace('.', ',')}`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : eventoSelecionado.tipo === 'vazio_liberado' ? (
                 <div className="bg-slate-50 p-4 rounded-2xl border border-dashed text-center space-y-4">
-                  <p className="text-xs text-gray-500 font-medium">Este bloco de horário está ativo na vitrine do site. Alunos da UFSC podem localizá-lo e reservá-lo a qualquer momento.</p>
+                  <p className="text-xs text-gray-500 font-medium">Este bloco de horário está ativo no site para agendamentos de alunos.</p>
                   <button 
                     onClick={() => handleRemoverDispo(eventoSelecionado.id)}
-                    className="flex items-center justify-center gap-2 w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs uppercase py-3 rounded-xl border border-red-200/50 transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs uppercase py-3 rounded-xl border border-red-200/50 transition-colors cursor-pointer"
                   >
                     <Trash2 size={14} /> Retirar Horário do Site
                   </button>

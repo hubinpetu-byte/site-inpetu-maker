@@ -9,11 +9,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AgendaBloco7 from './components/Agenda';
 
+// 🚀 IMPORTE AQUI a sua lista de projetos do arquivo data.ts do Portfólio.
+// Ajuste o caminho de importação caso a sua pasta 'portfolio' esteja em outro diretório.
+import { projetosPortfolio } from './sobre/portfolio/data'; 
+
 export default function Home() {
-  // Referência para controlar o scroll do carrossel de projetos
+  // Referência para controlar o scroll horizontal do carrossel no futuro
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Função para mover o carrossel
+  // 🚀 LÓGICA DE FILTRO: Pega APENAS os últimos 2 projetos cadastrados no arquivo data.ts
+  // 1. Verifica se a lista existe para não dar erro
+  // 2. .slice(-2) isola os 2 últimos itens do array
+  // 3. .reverse() coloca o projeto mais novo na frente
+  const ultimosProjetos = (projetosPortfolio || []).slice(-2).reverse();
+
+  // Função para mover o carrossel manualmente via botões (se necessário)
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
@@ -27,28 +37,28 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full bg-[#FAFAFA]">
+    <div className="w-full bg-[#FAFAFA] font-sans">
       
       {/* BLOCO 1 – CARROSSEL TOPO */}
       <Carousel />
 
       {/* BLOCO 2 – FRASE DO CONCEITO */}
       <section className="w-full bg-[#191F37] min-h-[80vh] flex flex-col items-center justify-center px-6 py-1">
-        <p className="text-white text-[48px] font-semibold leading-tight text-center max-w-7xl">
+        <p className="text-white text-[32px] md:text-[48px] font-semibold leading-tight text-center max-w-7xl">
           Transforme suas ideias em protótipos reais.
         </p>
 
-        <div className="flex flex-wrap gap-10 mt-20 justify-center">
+        <div className="flex flex-wrap gap-6 md:gap-10 mt-12 md:mt-20 justify-center">
           <Link
             href="/construir/equipamentos"
-            className="px-10 py-4 border-[3px] border-[#0377CC] text-white font-bold text-[24px] rounded-lg hover:bg-[#0377CC]/10 transition text-center"
+            className="px-8 md:px-10 py-4 border-[3px] border-[#0377CC] text-white font-bold text-[18px] md:text-[24px] rounded-lg hover:bg-[#0377CC]/10 transition text-center"
           >
             Agendar uso
           </Link>
 
           <Link
             href="/orcamento"
-            className="px-10 py-4 border-[3px] border-[#0377CC] text-white font-bold text-[24px] rounded-lg hover:bg-[#0377CC]/10 transition text-center"
+            className="px-8 md:px-10 py-4 border-[3px] border-[#0377CC] text-white font-bold text-[18px] md:text-[24px] rounded-lg hover:bg-[#0377CC]/10 transition text-center"
           >
             Solicitar orçamento
           </Link>
@@ -108,8 +118,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BLOCO 6 - NOVOS PROJETOS (Carrossel) */}
-      {/* <section className="w-full bg-[#181F37] py-20">
+      {/* BLOCO 6 - NOVOS PROJETOS (Puxando dinamicamente os 2 últimos do data.ts) */}
+      <section className="w-full bg-[#181F37] py-20">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-[40px] font-extrabold mb-10 text-[#FAFAFA]">Novos Projetos</h2>
           
@@ -117,13 +127,22 @@ export default function Home() {
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto scroll-smooth pb-8 no-scrollbar"
           >
-            <ProjectCard image="/projetos/projeto-braco-robotico.png" title="Braço Robótico" description="Protótipo funcional" filters={["Robótica"]} />
-            <ProjectCard image="/projetos/carro-autonomo.jpg" title="Carrinho Autônomo" description="IA aplicada" filters={["IA"]} />
-            <ProjectCard image="/projetos/projeto2.jpg" title="Novo Projeto" description="Marcenaria moderna" filters={["Marcenaria"]} />
-            <ProjectCard image="/projetos/projeto2.jpg" title="Novo Projeto" description="Marcenaria moderna" filters={["Marcenaria"]} />
+            {ultimosProjetos.length === 0 ? (
+              <p className="text-gray-400 text-sm font-medium">Nenhum projeto encontrado no arquivo data.ts.</p>
+            ) : (
+              ultimosProjetos.map((proj: any, idx: number) => (
+                <ProjectCard 
+                  key={proj.id || idx}
+                  image={proj.imagem || proj.image || proj.img || "/projetos/projeto2.jpg"} 
+                  title={proj.titulo || proj.title || proj.nome} 
+                  description={proj.descricao || proj.description} 
+                  filters={proj.categorias || proj.filters || proj.tags || ["Geral"]} 
+                />
+              ))
+            )}
           </div>
         </div>
-      </section> */}
+      </section> 
 
       {/* BLOCO 7 - AGENDA DINÂMICA */}
       <AgendaBloco7 />

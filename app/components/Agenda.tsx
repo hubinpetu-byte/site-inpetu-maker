@@ -1,13 +1,21 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 // 1. IMPORTAÇÃO DA BASE DE DADOS CENTRALIZADA
-import { LISTA_DE_EVENTOS } from '../constants/eventos'; 
+import { LISTA_DE_EVENTOS, Evento } from '../constants/eventos'; 
+
+// 🚀 IMPORTAÇÃO DO FIRESTORE PARA CONECTAR AS TURMAS PUBLICADAS
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function AgendaBloco7() {
   const [dataSelecionada, setDataSelecionada] = useState(new Date());
+  
+  // 🚀 ESTADO PARA GUARDAR EVENTOS VINDOS DO FIREBASE + EVENTOS LOCAIS
+  const [eventosCombinados, setEventosCombinados] = useState<Evento[]>(LISTA_DE_EVENTOS);
 
   const ano = dataSelecionada.getFullYear();
   const mes = dataSelecionada.getMonth();
@@ -17,7 +25,41 @@ export default function AgendaBloco7() {
     setDataSelecionada(new Date(ano, mes + direcao, 1));
   };
 
-  // Função para definir a cor baseada no tipo (Centralizada aqui para facilitar)
+  // 🚀 BUSCA TURMAS PUBLICADAS NO FIRESTORE E CONVERTE EM EVENTOS DA AGENDA
+  useEffect(() => {
+    const buscarTurmasDoFirebase = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "turmas_impressao3d"));
+        const eventosBanco: Evento[] = [];
+
+        querySnapshot.forEach((docSnap) => {
+          const d = docSnap.data();
+          if (d.dataISO) {
+            const dataObj = new Date(d.dataISO);
+            
+            eventosBanco.push({
+              id: docSnap.id,
+              dia: dataObj.getDate(),
+              mes: dataObj.getMonth() + 1, // No JS o mês vai de 0 a 11
+              ano: dataObj.getFullYear(),
+              nome: `${d.treinamentoNome || 'Treinamento Impressão 3D'} (${dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })})`,
+              tipo: 'treinamento',
+              href: '/construir/treinamentos/Impressao-3d-fdm'
+            });
+          }
+        });
+
+        // Junta os eventos estáticos locais com as turmas dinâmicas do Firebase
+        setEventosCombinados([...LISTA_DE_EVENTOS, ...eventosBanco]);
+      } catch (error) {
+        console.error("Erro ao carregar eventos da agenda no Firebase:", error);
+      }
+    };
+
+    buscarTurmasDoFirebase();
+  }, []);
+
+  // Função para definir a cor baseada no tipo de evento
   const getCorEvento = (tipo: string) => {
     switch (tipo) {
       case 'workshop': return 'bg-orange-500';
@@ -55,13 +97,13 @@ export default function AgendaBloco7() {
           
           {/* Navegação de Meses */}
           <div className="flex items-center justify-between mb-10">
-            <button onClick={() => mudarMes(-1)} className="p-2 hover:bg-white/10 rounded-full transition text-white">
+            <button onClick={() => mudarMes(-1)} className="p-2 hover:bg-white/10 rounded-full transition text-white cursor-pointer">
               <ChevronLeft size={24} />
             </button>
             <div className="text-center font-black text-xl uppercase tracking-[0.2em] text-white">
               {nomeMes} <span className="text-white/30 ml-2">{ano}</span>
             </div>
-            <button onClick={() => mudarMes(1)} className="p-2 hover:bg-white/10 rounded-full transition text-white">
+            <button onClick={() => mudarMes(1)} className="p-2 hover:bg-white/10 rounded-full transition text-white cursor-pointer">
               <ChevronRight size={24} />
             </button>
           </div>
@@ -86,8 +128,8 @@ export default function AgendaBloco7() {
                 const hoje = new Date();
                 const ehHoje = dia === hoje.getDate() && mes === hoje.getMonth() && ano === hoje.getFullYear();
                 
-                // 2. BUSCA O EVENTO NA LISTA IMPORTADA
-                const evento = LISTA_DE_EVENTOS.find(
+                // 🚀 BUSCA O EVENTO NA LISTA COMBINADA (LOCAL + FIREBASE)
+                const evento = eventosCombinados.find(
                   e => e.dia === dia && e.mes === (mes + 1) && e.ano === ano
                 );
 
