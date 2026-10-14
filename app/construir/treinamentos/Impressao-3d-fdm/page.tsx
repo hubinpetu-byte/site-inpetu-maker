@@ -43,7 +43,7 @@ export default function PaginaTreinamentoImpressao3D() {
         const d = docSnap.data() as Turma3DItem;
         // Filtra para mostrar turmas da Impressão 3D (ou todas as ativas)
         if (!d.treinamentoId || d.treinamentoId === "impressao-3d") {
-          lista.push({ id: docSnap.id, ...d });
+          lista.push({ ...d, id: docSnap.id });
         }
       });
 

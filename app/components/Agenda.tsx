@@ -11,11 +11,14 @@ import { LISTA_DE_EVENTOS, Evento } from '../constants/eventos';
 import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
+// 🌟 CORREÇÃO DO TYPESCRIPT: Estendemos a interface para permitir a propriedade 'id' opcional
+type EventoComId = Evento & { id?: string };
+
 export default function AgendaBloco7() {
   const [dataSelecionada, setDataSelecionada] = useState(new Date());
   
   // 🚀 ESTADO PARA GUARDAR EVENTOS VINDOS DO FIREBASE + EVENTOS LOCAIS
-  const [eventosCombinados, setEventosCombinados] = useState<Evento[]>(LISTA_DE_EVENTOS);
+  const [eventosCombinados, setEventosCombinados] = useState<EventoComId[]>(LISTA_DE_EVENTOS);
 
   const ano = dataSelecionada.getFullYear();
   const mes = dataSelecionada.getMonth();
@@ -30,7 +33,7 @@ export default function AgendaBloco7() {
     const buscarTurmasDoFirebase = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "turmas_impressao3d"));
-        const eventosBanco: Evento[] = [];
+        const eventosBanco: EventoComId[] = [];
 
         querySnapshot.forEach((docSnap) => {
           const d = docSnap.data();
@@ -38,7 +41,7 @@ export default function AgendaBloco7() {
             const dataObj = new Date(d.dataISO);
             
             eventosBanco.push({
-              id: docSnap.id,
+              id: docSnap.id, // Agora o TypeScript reconhece a propriedade 'id' sem reclamar!
               dia: dataObj.getDate(),
               mes: dataObj.getMonth() + 1, // No JS o mês vai de 0 a 11
               ano: dataObj.getFullYear(),

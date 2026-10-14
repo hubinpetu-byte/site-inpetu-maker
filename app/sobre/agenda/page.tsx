@@ -11,11 +11,14 @@ import { LISTA_DE_EVENTOS, Evento } from '../../constants/eventos';
 import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
+// 🌟 CORREÇÃO DO TYPESCRIPT: Criamos um tipo estendido para aceitar o 'id' opcional vindo do Firebase
+type EventoComId = Evento & { id?: string };
+
 export default function AgendaPageGrande() {
   const [dataSelecionada, setDataSelecionada] = useState(new Date());
 
   // 🚀 ESTADO QUE ARMAZENA A UNIÃO DOS EVENTOS ESTÁTICOS COM OS DO FIREBASE
-  const [eventosCombinados, setEventosCombinados] = useState<Evento[]>(LISTA_DE_EVENTOS);
+  const [eventosCombinados, setEventosCombinados] = useState<EventoComId[]>(LISTA_DE_EVENTOS);
 
   const ano = dataSelecionada.getFullYear();
   const mes = dataSelecionada.getMonth();
@@ -30,7 +33,7 @@ export default function AgendaPageGrande() {
     const buscarTurmasDoFirebase = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "turmas_impressao3d"));
-        const eventosBanco: Evento[] = [];
+        const eventosBanco: EventoComId[] = [];
 
         querySnapshot.forEach((docSnap) => {
           const d = docSnap.data();
