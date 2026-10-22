@@ -168,7 +168,7 @@ aprendizado e à colaboração.
             <p>
               O InPETU Maker também disponibiliza salas reservadas para equipes,
               startups e pesquisadores que precisam desenvolver projetos em um
-              ambiente (reservado). Esses espaços são ideais para protótipos que
+              ambiente reservado. Esses espaços são ideais para protótipos que
               exigem maior foco, organização e continuidade de testes.
             </p>
             <p>
